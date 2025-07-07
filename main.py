@@ -1,14 +1,10 @@
-import json
 from os import environ
-
 from flask import Flask, render_template, redirect, url_for, flash, request, abort, jsonify
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
 from functools import wraps
 from sqlalchemy import ForeignKey
-from sqlalchemy.exc import IntegrityError
-from werkzeug.exceptions import HTTPException
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
@@ -21,7 +17,6 @@ login_manager.init_app(app)
 app.config['SECRET_KEY'] = environ.get("api_key")
 ckeditor = CKEditor(app)
 Bootstrap(app)
-
 
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
@@ -283,4 +278,4 @@ def logout():
     return redirect(url_for("get_all_posts"))
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run()
