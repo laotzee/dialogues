@@ -9,7 +9,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterForm, LogInForm, CommentForm
+from contact import message_template, format_message, send_email
+from forms import CreatePostForm, RegisterForm, LogInForm, CommentForm, ContactForm
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -215,9 +216,26 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
-    return render_template("contact.html")
+
+    form = ContactForm()
+    if form.validate_on_submit():
+
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
+
+        body = message_template(name, email, message)
+        user_email = format_message(body)
+        send_email(user_email)
+
+        flash("Email sent. You'll receive a reply as soon as we can!")
+
+    return render_template(
+        "contact.html",
+        form=form,
+    )
 
 @app.route("/new-post", methods=["GET", "POST"])
 @only_admin
@@ -277,4 +295,4 @@ def logout():
     return redirect(url_for("get_all_posts"))
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
