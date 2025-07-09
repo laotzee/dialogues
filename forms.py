@@ -2,7 +2,7 @@ from wsgiref.validate import validator
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
-from wtforms.fields.simple import EmailField
+from wtforms.fields.simple import EmailField, TextAreaField
 from wtforms.validators import DataRequired, URL, Email
 from flask_ckeditor import CKEditorField
 
@@ -47,3 +47,18 @@ class LogInForm(FlaskForm):
                              ])
     submit = SubmitField("Submit Post")
 
+class ContactForm(FlaskForm):
+
+        name = StringField(
+            validators=[
+                DataRequired(),
+            ])
+        email = EmailField(
+            validators=[
+                DataRequired(),
+            ])
+        message = TextAreaField(
+            validators=[
+                DataRequired(),
+            ])
+        submit = SubmitField("Submit Post")
