@@ -127,10 +127,10 @@ def register():
         print(email_exist)
 
         if email_exist:
-            flash("An account with that email already exist.\nTry logging in")
+            flash("An account with that email already exist.\nTry logging in", "error")
             return redirect(url_for("login"))
         elif name_exist:
-            flash("That name is already used")
+            flash("That name is already used", "error)")
         else:
             hashed_password = generate_password_hash(
                 password=password,
@@ -172,9 +172,9 @@ def login():
                 return redirect(url_for("get_all_posts"))
 
             else:
-                flash("Incorrect password")
+                flash("Incorrect password", "error")
         else:
-            flash("Such email does not exist. Try to register")
+            flash("Such email does not exist. Try to register", "error")
             return redirect("register")
 
     return render_template("login.html", form=form)
@@ -190,7 +190,6 @@ def show_post(post_id):
 
         # add comment to the appropriate table
         # Verify if the user if logged first
-
 
         comment = request.form.get("comment")
 
@@ -230,7 +229,7 @@ def contact():
         user_email = format_message(body)
         send_email(user_email)
 
-        flash("Email sent. You'll receive a reply as soon as we can!")
+        flash("Email sent. You'll receive a reply as soon as we can!", "success")
 
     return render_template(
         "contact.html",
@@ -295,4 +294,4 @@ def logout():
     return redirect(url_for("get_all_posts"))
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
