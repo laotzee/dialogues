@@ -1,7 +1,13 @@
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    {% for message in messages %}
-      <p>{{ message }}</p>
-    {% endfor %}
-  {% endif %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            {% if category == "error" %}
+                <div class="border border-5 border-danger form-control mb-4 rounded-end">
+            {% elif category == "success"%}
+                <div class="border border-5 border-success form-control mb-4 rounded-end">
+            {% endif %}
+        {{ message }}
+                </div>
+        {% endfor %}
+    {% endif %}
 {% endwith %}
