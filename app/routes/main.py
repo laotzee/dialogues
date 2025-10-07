@@ -26,7 +26,6 @@ def only_admin(func):
     @wraps(func)
     def wrapper_func(*args, **kwargs):
 
-        wrapper_func.__name__ = func.__name__
         if not current_user.is_anonymous and current_user.id == 1:
             return func(*args, **kwargs)
         with app.app_context():
