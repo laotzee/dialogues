@@ -1,11 +1,9 @@
-from flask import Blueprint, render_template, redirect, url_for, request
 from flask_login import login_user, login_required, current_user, logout_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from app.forms import CreatePostForm, RegisterForm, LogInForm, CommentForm, ContactForm
-from functools import wraps
 
-from app.extensions import login_manager
-from app.models.models import BlogPost, User, Comments
+from functools import wraps
+from app.extensions import login_manager, db
+from .logic import *
 
 blueprint = Blueprint('blueprint', __name__)
 
@@ -33,10 +31,37 @@ def only_admin(func):
 
     return wrapper_func
 
-
 @blueprint.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
+    return render_template('index.html', all_posts=posts)
+ 
+
+@blueprint.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@blueprint.route("/contact", methods=["GET", "POST"])
+def contact():
+
+    form = ContactForm()
+    if form.validate_on_submit():
+
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
+
+        body = message_template(name, email, message)
+        user_email = format_message(body)
+        send_email(user_email)
+
+        flash("Email sent. You'll receive a reply as soon as we can!", "success")
+
+        return render_template(
+            "contact.html",
+            form=form,
+        )
     return render_template("index.html", all_posts=posts)
 
 
@@ -110,118 +135,36 @@ def login():
 
     return render_template("login.html", form=form)
 
-
-
-@blueprint.route("/post/<int:post_id>", methods=["GET", "POST"])
-def show_post(post_id):
-
-    form = CommentForm()
-
-    if form.validate_on_submit():
-
-        # add comment to the appropriate table
-        # Verify if the user if logged first
-
-        comment = request.form.get("comment")
-
-        new_comment =  Comments(
-            text=comment,
-            user_id=current_user.id,
-            post_id=post_id,
-        )
-
-        db.session.add(new_comment)
-        db.session.commit()
-
-    requested_post = BlogPost.query.get(post_id)
-    return render_template(
-        "post.html",
-        post=requested_post,
-        form=form,
-        comments=requested_post.comments
-    )
-
-@blueprint.route("/about")
-def about():
-    return render_template("about.html")
-
-
-@blueprint.route("/contact", methods=["GET", "POST"])
-def contact():
-
-    form = ContactForm()
-    if form.validate_on_submit():
-
-        name = request.form.get("name")
-        email = request.form.get("email")
-        message = request.form.get("message")
-
-        body = message_template(name, email, message)
-        user_email = format_message(body)
-        send_email(user_email)
-
-        flash("Email sent. You'll receive a reply as soon as we can!", "success")
-
-    return render_template(
-        "contact.html",
-        form=form,
-    )
-
-@blueprint.route("/new-post", methods=["GET", "POST"])
-@only_admin
-def add_new_post():
-    form = CreatePostForm()
-    if form.validate_on_submit():
-
-        new_post = BlogPost(
-            author=current_user.name,
-            title=form.title.data,
-            subtitle=form.subtitle.data,
-            date=date.today().strftime("%B %d, %Y"),
-            body=form.body.data,
-            img_url=form.img_url.data,
-            user_id=current_user.id,
-        )
-        db.session.add(new_post)
-        db.session.commit()
-        return redirect(url_for("blueprint.get_all_posts"))
-    return render_template("make-post.html", form=form)
-
-
-@blueprint.route("/edit-post/<int:post_id>", methods=["GET", "POST"])
-@only_admin
-def edit_post(post_id):
-    post = BlogPost.query.get(post_id)
-    edit_form = CreatePostForm(
-        title=post.title,
-        subtitle=post.subtitle,
-        img_url=post.img_url,
-        author=post.author,
-        body=post.body
-    )
-    if edit_form.validate_on_submit():
-        post.title = edit_form.title.data
-        post.subtitle = edit_form.subtitle.data
-        post.img_url = edit_form.img_url.data
-        post.body = edit_form.body.data
-        db.session.commit()
-        return redirect(url_for("blueprint.show_post", post_id=post.id))
-
-    return render_template("make-post.html", form=edit_form)
-
-
-@blueprint.route("/delete/<int:post_id>")
-@only_admin
-def delete_post(post_id):
-    post_to_delete = BlogPost.query.get(post_id)
-    db.session.delete(post_to_delete)
-    db.session.commit()
-    return redirect(url_for('blueprint.get_all_posts'))
-
 @blueprint.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("blueprint.get_all_posts"))
+
+
+@blueprint.route("/posts/<int:post_id>", 
+                 methods=["GET", "POST", "DELETE", "PUT" ])
+def posts_id(post_id):
+
+    if request.method == "DELETE":
+        response = delete_post(post_id)
+    elif request.method == "PUT":
+        response = update_post(post_id)
+    else:
+        response = show_post(post_id)
+
+    return response
+
+@blueprint.route("/posts", methods=["GET", "POST"])
+def posts():
+    if request.method == "GET":
+        message = {"error": "The requested feature is not yet implemented."}
+        return jsonify(message), 501
+
+    elif request.method == "POST":
+        create_post()
+    else:
+        message = {"error": "The requested feature is not yet implemented."}
+        return jsonify(message), 501
 
 
