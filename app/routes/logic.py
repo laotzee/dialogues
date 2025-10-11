@@ -1,8 +1,135 @@
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
+from app.extensions import login_manager, db
 from app.forms import CreatePostForm, RegisterForm, LogInForm, CommentForm, ContactForm
 from app.models.models import BlogPost, User, Comments
+from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
+from flask_login import login_user, login_required, current_user, logout_user
+from functools import wraps
+from werkzeug.security import generate_password_hash, check_password_hash
 
-def show_post(post_id):
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
+
+def instance_exist(**kwargs):
+    """Helps verify aspects of entity in the db"""
+
+    entity = db.session.query(User).filter_by(**kwargs).first()
+    return entity
+
+
+def only_admin(func):
+
+    @wraps(func)
+    def wrapper_func(*args, **kwargs):
+
+        if not current_user.is_anonymous and current_user.id == 1:
+            return func(*args, **kwargs)
+        with app.app_context():
+            return abort(403)
+
+    return wrapper_func
+
+def process_home() -> str:
+    posts = BlogPost.query.all()
+    return render_template('index.html', all_posts=posts)
+
+
+def process_about():
+    return render_tempalte('about.html')
+
+def process_contact() -> str:
+    form = ContactForm()
+    if form.validate_on_submit():
+
+        name = request.form.get("name")
+        email = request.form.get("email")
+        message = request.form.get("message")
+
+        body = message_template(name, email, message)
+        user_email = format_message(body)
+        send_email(user_email)
+
+        flash("Email sent. You'll receive a reply as soon as we can!", "success")
+
+        return render_template(
+            "contact.html",
+            form=form,
+        )
+    return render_template("contact.html")
+
+def process_login() -> str:
+    form = LogInForm()
+
+    if form.validate_on_submit():
+
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        user = instance_exist(email=email)
+        if user:
+
+            if check_password_hash(user.password, password):
+
+                login_user(user)
+                #login him in lol
+                return redirect(url_for("blueprint.get_all_posts"))
+
+            else:
+                flash("Incorrect password", "error")
+        else:
+            flash("Such email does not exist. Try to register", "error")
+            return redirect("blueprint.register")
+
+    return render_template("login.html", form=form)
+
+def process_register() -> str:
+    form = RegisterForm()
+
+    if form.validate_on_submit():
+
+        name = request.form.get("name")
+        password = request.form.get("password")
+        email = request.form.get("email")
+
+
+        email_exist = instance_exist(email=email)
+        name_exist = instance_exist(name=name)
+        print(name_exist)
+        print(email_exist)
+
+        if email_exist:
+            flash("An account with that email already exist.\nTry logging in", "error")
+            return redirect(url_for("blueprint.login"))
+        elif name_exist:
+            flash("That name is already used", "error)")
+        else:
+            hashed_password = generate_password_hash(
+                password=password,
+                method="scrypt:32768:8:1",
+                salt_length=16,
+            )
+            new_user = User(
+                email=email,
+                name=name,
+                password=hashed_password,
+            )
+            db.session.add(new_user)
+            db.session.commit()
+
+            login_user(new_user)
+
+            return redirect(url_for("blueprint.get_all_posts"))
+
+    return render_template("register.html", form=form)
+
+
+def process_logout() -> str:
+    logout_user()
+    return redirect(url_for("blueprint.get_all_posts"))
+
+
+def show_post(post_id: int) -> str:
     form = CommentForm()
 
     if form.validate_on_submit():
@@ -29,14 +156,13 @@ def show_post(post_id):
         comments=requested_post.comments
     )
 
-def delete_post(post_id):
+def delete_post(post_id: int) -> str:
     post_to_delete = BlogPost.query.get(post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
     return redirect(url_for('blueprint.home'))
 
-def update_post(post_id):
-
+def update_post(post_id: int) -> str:
     post = BlogPost.query.get(post_id)
     edit_form = CreatePostForm(
         title=post.title,
@@ -55,8 +181,7 @@ def update_post(post_id):
 
     return render_template("make-post.html", form=edit_form)
 
-def create_post():
-
+def create_post() -> str:
     form = CreatePostForm()
     if form.validate_on_submit():
 

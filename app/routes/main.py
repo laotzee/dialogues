@@ -1,168 +1,72 @@
-from flask_login import login_user, login_required, current_user, logout_user
-from werkzeug.security import generate_password_hash, check_password_hash
-
-from functools import wraps
-from app.extensions import login_manager, db
 from .logic import *
 
 blueprint = Blueprint('blueprint', __name__)
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
-
-
-def instance_exist(**kwargs):
-    """Helps verify aspects of entity in the db"""
-
-    entity = db.session.query(User).filter_by(**kwargs).first()
-    return entity
-
-
-def only_admin(func):
-
-    @wraps(func)
-    def wrapper_func(*args, **kwargs):
-
-        if not current_user.is_anonymous and current_user.id == 1:
-            return func(*args, **kwargs)
-        with app.app_context():
-            return abort(403)
-
-    return wrapper_func
-
 @blueprint.route('/')
 def get_all_posts():
-    posts = BlogPost.query.all()
-    return render_template('index.html', all_posts=posts)
- 
+    """Route for home page"""
+    page = process_home()
+    return page
+
 
 @blueprint.route("/about")
 def about():
-    return render_template("about.html")
+    """Route for about page"""
+    page = process_about()
+    return page
 
 
 @blueprint.route("/contact", methods=["GET", "POST"])
 def contact():
-
-    form = ContactForm()
-    if form.validate_on_submit():
-
-        name = request.form.get("name")
-        email = request.form.get("email")
-        message = request.form.get("message")
-
-        body = message_template(name, email, message)
-        user_email = format_message(body)
-        send_email(user_email)
-
-        flash("Email sent. You'll receive a reply as soon as we can!", "success")
-
-        return render_template(
-            "contact.html",
-            form=form,
-        )
-    return render_template("index.html", all_posts=posts)
+    """Route for contact page"""
+    page = process_contact()
+    return page
 
 
 @blueprint.route('/register', methods=["GET", "POST"])
 def register():
-
-    form = RegisterForm()
-
-    if form.validate_on_submit():
-
-        name = request.form.get("name")
-        password = request.form.get("password")
-        email = request.form.get("email")
-
-
-        email_exist = instance_exist(email=email)
-        name_exist = instance_exist(name=name)
-        print(name_exist)
-        print(email_exist)
-
-        if email_exist:
-            flash("An account with that email already exist.\nTry logging in", "error")
-            return redirect(url_for("blueprint.login"))
-        elif name_exist:
-            flash("That name is already used", "error)")
-        else:
-            hashed_password = generate_password_hash(
-                password=password,
-                method="scrypt:32768:8:1",
-                salt_length=16,
-            )
-            new_user = User(
-                email=email,
-                name=name,
-                password=hashed_password,
-            )
-            db.session.add(new_user)
-            db.session.commit()
-
-            login_user(new_user)
-
-            return redirect(url_for("blueprint.get_all_posts"))
-
-    return render_template("register.html", form=form)
+    """Route for register page"""
+    page = process_register()
+    return page
 
 
 @blueprint.route('/login', methods=["GET", "POST"])
 def login():
+    """Route for login page"""
+    page = process_login()
+    return page
 
-    form = LogInForm()
-
-    if form.validate_on_submit():
-
-        email = request.form.get("email")
-        password = request.form.get("password")
-
-        user = instance_exist(email=email)
-        if user:
-
-            if check_password_hash(user.password, password):
-
-                login_user(user)
-                #login him in lol
-                return redirect(url_for("blueprint.get_all_posts"))
-
-            else:
-                flash("Incorrect password", "error")
-        else:
-            flash("Such email does not exist. Try to register", "error")
-            return redirect("blueprint.register")
-
-    return render_template("login.html", form=form)
 
 @blueprint.route("/logout")
 @login_required
 def logout():
-    logout_user()
-    return redirect(url_for("blueprint.get_all_posts"))
+    """Route for logout page"""
+    page = process_logout()
+    return page
 
 
 @blueprint.route("/posts/<int:post_id>", 
                  methods=["GET", "POST", "DELETE", "PUT" ])
-def posts_id(post_id):
-
+def posts_id(post_id: int) -> str:
+    """Process posts actions on a specific instance"""
     if request.method == "DELETE":
-        response = delete_post(post_id)
+        page = delete_post(post_id)
     elif request.method == "PUT":
-        response = update_post(post_id)
+        page = update_post(post_id)
     else:
-        response = show_post(post_id)
+        page = show_post(post_id)
+    return page
 
-    return response
 
 @blueprint.route("/posts", methods=["GET", "POST"])
-def posts():
-    if request.method == "GET":
+def posts() -> str:
+    """Process general posts actions"""
+    if request.method == "GET": # show all posts
         message = {"error": "The requested feature is not yet implemented."}
         return jsonify(message), 501
-
     elif request.method == "POST":
-        create_post()
+        page = create_post()
+        return page
     else:
         message = {"error": "The requested feature is not yet implemented."}
         return jsonify(message), 501
