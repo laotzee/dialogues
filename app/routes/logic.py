@@ -1,6 +1,6 @@
-from app.extensions import login_manager, db
-from app.forms import CreatePostForm, RegisterForm, LogInForm, CommentForm, ContactForm
-from app.models.models import BlogPost, User, Comments
+from ..extensions import login_manager, db
+from ..forms import CreatePostForm, RegisterForm, LogInForm, CommentForm, ContactForm
+from ..models.models import User, Post, Comment
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 from flask_login import login_user, login_required, current_user, logout_user
 from functools import wraps
@@ -31,7 +31,7 @@ def only_admin(func):
     return wrapper_func
 
 def process_home() -> str:
-    posts = BlogPost.query.all()
+    posts = Post.query.all()
     return render_template('index.html', all_posts=posts)
 
 
@@ -148,7 +148,7 @@ def show_post(post_id: int) -> str:
         db.session.add(new_comment)
         db.session.commit()
 
-    requested_post = BlogPost.query.get(post_id)
+    requested_post = Post.query.get(post_id)
     return render_template(
         "post.html",
         post=requested_post,
@@ -157,13 +157,13 @@ def show_post(post_id: int) -> str:
     )
 
 def delete_post(post_id: int) -> str:
-    post_to_delete = BlogPost.query.get(post_id)
+    post_to_delete = Post.query.get(post_id)
     db.session.delete(post_to_delete)
     db.session.commit()
     return redirect(url_for('blueprint.home'))
 
 def update_post(post_id: int) -> str:
-    post = BlogPost.query.get(post_id)
+    post = Post.query.get(post_id)
     edit_form = CreatePostForm(
         title=post.title,
         subtitle=post.subtitle,
@@ -185,7 +185,7 @@ def create_post() -> str:
     form = CreatePostForm()
     if form.validate_on_submit():
 
-        new_post = BlogPost(
+        new_post = Post(
             author=current_user.name,
             title=form.title.data,
             subtitle=form.subtitle.data,
