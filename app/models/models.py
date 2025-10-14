@@ -1,61 +1,94 @@
-from sqlalchemy.orm import relationship
-from sqlalchemy import ForeignKey
-from app.extensions import db
+
+from typing import Optional
+from datetime import datetime
+from sqlalchemy import ForeignKey, String, DateTime, Text, Boolean, Integer
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.sql import func
+from ..extensions import db
 from flask_login import UserMixin
 
-# TODO: change all tables to a singular and sentence case
 
 ##CONFIGURE TABLES
 
 class User(db.Model, UserMixin):
 
-    __tablename__ = "user"
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(250), nullable=False, unique=True)
-    name =  db.Column(db.String(250), nullable=False, unique=True)
-    password = db.Column(db.String(250), nullable=False)
+    __tablename__ = 'user'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(String(250), nullable=False, unique=True)
+    username: Mapped[str] =  mapped_column(String(250), nullable=False, unique=True)
+    password: Mapped[str] = mapped_column(String(250), nullable=False)
+    name: Mapped[str] =  mapped_column(String(250))
+    user_role: Mapped[int] =  mapped_column(Integer) #Reference to a different table... or a new class???
+    is_active: Mapped[bool] =  mapped_column(Boolean)
+    posts: Mapped[list['Post']] = relationship(
+            back_populates='author',
+            cascade='all, delete-orphan'
+            )
+    comments: Mapped[list['Comment']] = relationship(
+            back_populates='user',
+            cascade='all, delete-orphan',
+            )
+    created_at: Mapped[datetime] = mapped_column(
+            DateTime(timezone=True),
+            default=func.now(),
+            )
+    updated_at: Mapped[datetime] = mapped_column(
+            DateTime(timezone=True),
+            default=func.now(),
+            onupdate=func.now(),
+            )
 
-    # List of posts made by a particular user
-    posts = relationship("BlogPost", back_populates="user")
+class Post(db.Model):
+    __tablename__ = 'post'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    author_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
+    subtitle: Mapped[str] = mapped_column(String(250))
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    summary: Mapped[Optional[str]] = mapped_column(Text)
+    author: Mapped['User'] = relationship(back_populates='posts')
+    comments: Mapped[list['Comment']] = relationship(back_populates='post')
+    created_at: Mapped[datetime] = mapped_column(
+            DateTime(timezone=True),
+            default=func.now(),
+            )
+    updated_at: Mapped[datetime] = mapped_column(
+            DateTime(timezone=True),
+            default=func.now(),
+            onupdate=func.now(),
+            )
 
-    # list of comments made by a particualar userwerkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'add_user_confirm' with values
-    comments = relationship("Comments", back_populates="user")
-
-class BlogPost(db.Model):
-    __tablename__ = "blog_posts"
-    id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(250), nullable=False)
-    title = db.Column(db.String(250), unique=True, nullable=False)
-    subtitle = db.Column(db.String(250), nullable=False)
-    date = db.Column(db.String(250), nullable=False)
-    body = db.Column(db.Text, nullable=False)
-    img_url = db.Column(db.String(250), nullable=False)
-
-    # ID reference to the user who created the post
-    user_id = db.Column(db.Integer, ForeignKey("user.id"))
     # Direct reference to the user instance who create the post
     # Like a handle
-    user = relationship("User", back_populates="posts")
+    # ID reference to the user who created the post
+#    user_id: Mapped[int] = mapped_column(teger, ForeignKey('user.id'))
+#    user: Mapped[User] = relationship('User', back_populates='posts')
 
     # List of comments in a particular post
-    comments = relationship("Comments", back_populates="post")
 
-class Comments(db.Model):
+class Comment(db.Model):
+    __tablename__ = 'comments'
 
-    id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(250), nullable=False)
 
-    # ID reference to the user who created the comment
-    user_id = db.Column(db.Integer, ForeignKey("user.id"))
+    id: Mapped[int] = mapped_column(primary_key=True)
+    content: Mapped[str] = mapped_column(String(500), nullable=False)
 
     # ID reference to the blog which holds the comment
-    post_id = db.Column(db.Integer, ForeignKey("blog_posts.id"))
-
     # Direct reference to the post which holds the comment
-    post = relationship("BlogPost", back_populates="comments")
-
+    post_id: Mapped[int] = mapped_column(ForeignKey('post.id'))
+    post: Mapped['Post'] = relationship(back_populates='comments')
     # Direct reference to the user instance who create the comment
-    user = relationship("User", back_populates="comments")
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    user: Mapped['User'] = relationship(back_populates='comments')
+    created_at: Mapped[datetime] = mapped_column(
+            DateTime(timezone=True),
+            default=func.now(),
+            )
+    updated_at: Mapped[datetime] = mapped_column(
+            DateTime(timezone=True),
+            default=func.now(),
+            onupdate=func.now(),
+            )
 
 
 #    with app.app_context():
