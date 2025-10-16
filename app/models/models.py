@@ -14,12 +14,12 @@ class User(db.Model, UserMixin):
 
     __tablename__ = 'user'
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(250), nullable=False, unique=True)
-    username: Mapped[str] =  mapped_column(String(250), nullable=False, unique=True)
-    password: Mapped[str] = mapped_column(String(250), nullable=False)
-    name: Mapped[str] =  mapped_column(String(250))
-    user_role: Mapped[int] =  mapped_column(Integer) #Reference to a different table... or a new class???
-    is_active: Mapped[bool] =  mapped_column(Boolean)
+    email: Mapped[str] = mapped_column(String(250), unique=True)
+    username: Mapped[str] =  mapped_column(String(250), unique=True)
+    password: Mapped[str] = mapped_column(String(250))
+    name: Mapped[str | None] =  mapped_column(String(250))
+    #user_role: Mapped[int] =  mapped_column(Integer) #Reference to a different table... or a new class???
+    #is_active: Mapped[bool] =  mapped_column(Boolean)
     posts: Mapped[list['Post']] = relationship(
             back_populates='author',
             cascade='all, delete-orphan'
