@@ -1,3 +1,4 @@
+from .helpers import *
 from ..extensions import login_manager, db
 from ..forms import CreatePostForm, RegisterForm, LogInForm, CommentForm, ContactForm
 from ..models.models import User, Post, Comment
@@ -92,7 +93,6 @@ def process_register() -> str:
         password = request.form.get("password")
         email = request.form.get("email")
 
-
         email_exist = instance_exist(email=email)
         name_exist = instance_exist(name=name)
         print(name_exist)
@@ -104,21 +104,9 @@ def process_register() -> str:
         elif name_exist:
             flash("That name is already used", "error)")
         else:
-            hashed_password = generate_password_hash(
-                password=password,
-                method="scrypt:32768:8:1",
-                salt_length=16,
-            )
-            new_user = User(
-                email=email,
-                name=name,
-                password=hashed_password,
-            )
-            db.session.add(new_user)
-            db.session.commit()
-
+            hashed_password = hash_password(password)
+            new_user = create_user(username, password, email)
             login_user(new_user)
-
             return redirect(url_for("blueprint.get_all_posts"))
 
     return render_template("register.html", form=form)

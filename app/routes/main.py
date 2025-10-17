@@ -1,4 +1,4 @@
-from .logic import *
+from .views import *
 
 blueprint = Blueprint('blueprint', __name__)
 
