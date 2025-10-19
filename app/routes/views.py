@@ -7,37 +7,13 @@ from flask_login import login_user, login_required, current_user, logout_user
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
-
-
-def instance_exist(**kwargs):
-    """Helps verify aspects of entity in the db"""
-
-    entity = db.session.query(User).filter_by(**kwargs).first()
-    return entity
-
-
-def only_admin(func):
-
-    @wraps(func)
-    def wrapper_func(*args, **kwargs):
-
-        if not current_user.is_anonymous and current_user.id == 1:
-            return func(*args, **kwargs)
-        with app.app_context():
-            return abort(403)
-
-    return wrapper_func
 
 def process_home() -> str:
     posts = Post.query.all()
     return render_template('index.html', all_posts=posts)
 
-
 def process_about():
-    return render_tempalte('about.html')
+    return render_template('about.html')
 
 def process_contact() -> str:
     form = ContactForm()
@@ -57,52 +33,41 @@ def process_contact() -> str:
             "contact.html",
             form=form,
         )
-    return render_template("contact.html")
+    return render_template("contact.html",  form=form)
 
 def process_login() -> str:
     form = LogInForm()
 
     if form.validate_on_submit():
+        email, password = process_login_info()
+        user = get_user_by_attribute(email=email)
 
-        email = request.form.get("email")
-        password = request.form.get("password")
-
-        user = instance_exist(email=email)
         if user:
-
             if check_password_hash(user.password, password):
-
                 login_user(user)
-                #login him in lol
                 return redirect(url_for("blueprint.get_all_posts"))
-
             else:
                 flash("Incorrect password", "error")
         else:
             flash("Such email does not exist. Try to register", "error")
-            return redirect("blueprint.register")
-
+            return redirect(url_for("blueprint.register"))
     return render_template("login.html", form=form)
 
 def process_register() -> str:
     form = RegisterForm()
 
     if form.validate_on_submit():
-
-        name = request.form.get("name")
-        password = request.form.get("password")
-        email = request.form.get("email")
-
-        email_exist = instance_exist(email=email)
-        name_exist = instance_exist(name=name)
-        print(name_exist)
+        username, password, email = process_register_info()
+        email_exist = get_user_by_attribute(email=email)
+        username_exist = get_user_by_attribute(username=username)
+        print(username_exist)
         print(email_exist)
 
         if email_exist:
             flash("An account with that email already exist.\nTry logging in", "error")
             return redirect(url_for("blueprint.login"))
-        elif name_exist:
-            flash("That name is already used", "error)")
+        elif username_exist:
+            flash("That username is already used", "error)")
         else:
             hashed_password = hash_password(password)
             new_user = create_user(username, password, email)
