@@ -1,0 +1,156 @@
+:root {
+  /* --- The New Palette --- */
+  --clr-body-bg: #F7F7F7;      /* Background */
+  --clr-surface: #EEEEEE;      /* Your "Primary" -> Now Surface/Menu BG */
+  --clr-accent:  #929AAB;      /* Your "Secondary" -> Now Interactive/Links */
+  --clr-text:    #393E46;      /* Text Color */
+  
+  /* Utilities */
+  --header-height: 4rem;
+  --z-overlay: 1000;
+  --z-header: 1001;
+  --z-toggle: 1002;
+}
+
+body {
+  background-color: var(--clr-body-bg);
+  color: var(--clr-text);
+  margin: 0;
+  font-family: sans-serif; /* Ensure a font is set */
+}
+
+/* --- Layout & Typography --- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  position: relative;
+  z-index: var(--z-header);
+  background-color: var(--clr-body-bg); /* Matches body to look seamless */
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--clr-text); /* High contrast for the brand name */
+  text-decoration: none;
+}
+
+/* --- Mobile Menu --- */
+.primary-navigation {
+  position: fixed;
+  inset: 0; 
+  z-index: var(--z-overlay);
+  padding-top: 5rem;
+  
+  /* Using your "Primary" color as the menu background */
+  background: var(--clr-surface); 
+  
+  transform: translateX(100%);
+  transition: transform 350ms ease-out;
+}
+
+.primary-navigation[data-visible="true"] {
+  transform: translateX(0);
+}
+
+.primary-navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.primary-navigation a {
+  display: block;
+  padding: 1rem;
+  color: var(--clr-text);
+  text-decoration: none;
+  
+  /* Subtle border using the text color with low opacity for elegance */
+  border-bottom: 1px solid rgba(57, 62, 70, 0.1); 
+  transition: color 0.2s;
+}
+
+.primary-navigation a:hover,
+.primary-navigation a:focus {
+    color: var(--clr-accent); /* Blue-grey on hover */
+    background: rgba(255,255,255, 0.5); /* Slight lighten on hover */
+}
+
+/* --- Navigation Toggle (Hamburger) --- */
+.nav-toggle {
+  display: block;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: var(--z-toggle);
+  padding: 0.5rem;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+  display: block;
+  width: 2rem;
+  height: 3px;
+  background: var(--clr-text); /* Charcoal bars */
+  border-radius: 1px;
+  transition: transform 0.3s ease-in-out, background 0.3s;
+}
+
+/* Add a pop of color to the hamburger when hovered */
+.nav-toggle:hover .hamburger,
+.nav-toggle:hover .hamburger::before,
+.nav-toggle:hover .hamburger::after {
+    background: var(--clr-accent);
+}
+
+.hamburger { position: relative; }
+.hamburger::before, .hamburger::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.hamburger::before { transform: translateY(-0.6rem); }
+.hamburger::after  { transform: translateY(0.6rem); }
+
+/* --- Active Hamburger State --- */
+.nav-toggle[aria-expanded="true"] .hamburger { background: transparent; }
+.nav-toggle[aria-expanded="true"] .hamburger::before { transform: rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .hamburger::after { transform: rotate(-45deg); }
+
+/* --- Desktop View --- */
+@media (min-width: 600px) {
+  .nav-toggle { display: none; }
+
+  .primary-navigation {
+    position: static;
+    transform: none;
+    transition: none;
+    padding: 0;
+    background: transparent;
+    z-index: auto;
+    inset: auto;
+    margin-left: auto;
+  }
+
+  .primary-navigation ul {
+    display: flex;
+    gap: 2rem; 
+  }
+
+  .primary-navigation a {
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-weight: 500;
+  }
+  
+  /* Desktop Hover Effect */
+  .primary-navigation a:hover {
+    color: var(--clr-accent); /* The Blue-Grey shines here */
+    background: transparent;
+  }
+}
