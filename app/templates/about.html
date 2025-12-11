@@ -1,31 +1,16 @@
-{% include "header.html" %}
+{% extends "content.html" %}
 
-  <!-- Page Header -->
-  <header class="masthead" style="background-image: url({{ url_for('static', filename='img/about-bg.jpg')}})">
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="page-heading">
-            <h1>About Me</h1>
-            <span class="subheading">This is what I do.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
+{% block title %}
+About
+{% endblock %}
 
-  <!-- Main Content -->
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe nostrum ullam eveniet pariatur voluptates odit, fuga atque ea nobis sit soluta odio, adipisci quas excepturi maxime quae totam ducimus consectetur?</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius praesentium recusandae illo eaque architecto error, repellendus iusto reprehenderit, doloribus, minus sunt. Numquam at quae voluptatum in officia voluptas voluptatibus, minus!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consequuntur magnam, excepturi aliquid ex itaque esse est vero natus quae optio aperiam soluta voluptatibus corporis atque iste neque sit tempora!</p>
-      </div>
-    </div>
-  </div>
+{% block aside %}
+{% endblock %}
 
-  <hr>
-
-  {% include "footer.html" %}
+{% block main %}
+<h1>About</h1>
+<p>Everyone has endured some struggles, such as coping with conflicting emotions, loss, or self-management. In the same way, everybody has felt happiness from some accomplishment, mastery over some activity, or awe at the beauty of nature. Even if we only experience a fraction of such a range of events, and what luck has in store for us is unknown, human experience encompasses all we can live.</p>
+<p>More often than not, hardships catch us unprepared, and joys unaware of their value. We learn how to count and talk, but learning how to live, or undergo human experience, is a skill developed mostly unspoken. Our trial-and-error method might suffice to some extent; however, we should enrich our inner resources by instructing ourselves in human experience, self-knowledge, and our interaction with the world.</p>
+<p>Laotze’s Dialogues does not aim to define an irrefutable and rigid lifestyle, but rather explore, refine, and convey ideas from human experience to enhance how we live. This is a never-ending endeavor. Life and circumstances are changing, and so the need to adapt and acquire new knowledge emerges. Such conditions prompt us to learn how to live until our last day alive.</p>
+<p>Reading a fragment of insight will not make it stick with you. There will come a time when you are shaken to the bone, remember a particular piece of writing, and test it. This is the intent behind each word, paragraph, and text; every one of them is meant to resonate with you, spur thinking of your own, and be used. In doing so, I hope Laotze’s Dialogues has an impact on the quality of the experiences we have as human beings.</p>
+{% endblock %}
