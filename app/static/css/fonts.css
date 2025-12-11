@@ -1,0 +1,33 @@
+/* DM Serif */
+
+@font-face {
+  font-family: 'DM Serif Text';
+  src: url('/static/fonts/DMSerifText-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Roboto */
+
+    /* Regular */
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/static/fonts/Roboto-VariableFont_wdth,wght.ttf') format('truetype');
+  
+  font-weight: 100 900; 
+  font-style: normal;
+  font-display: swap;
+}
+
+    /* Italic */
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/static/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+  
+  font-weight: 100 900; 
+  font-style: italic;
+  font-display: swap;
+}

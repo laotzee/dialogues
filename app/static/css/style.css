@@ -1,11 +1,15 @@
+@import url('fonts.css');
+
 :root {
-  /* --- The New Palette --- */
-  --clr-body-bg: #F7F7F7;      /* Background */
-  --clr-surface: #EEEEEE;      /* Your "Primary" -> Now Surface/Menu BG */
-  --clr-accent:  #929AAB;      /* Your "Secondary" -> Now Interactive/Links */
-  --clr-text:    #393E46;      /* Text Color */
+  --clr-body-bg: #F7F7F7;
+  --clr-surface: #EEEEEE;
+  --clr-accent:  #929AAB;
+  --clr-text:    #393E46;
+
+
+  --font-logo: 'DM Serif Display', serif;
+  --font-body: 'Roboto', Helvetica, Arial, sans-serif;
   
-  /* Utilities */
   --header-height: 4rem;
   --z-overlay: 1000;
   --z-header: 1001;
@@ -16,39 +20,39 @@ body {
   background-color: var(--clr-body-bg);
   color: var(--clr-text);
   margin: 0;
-  font-family: sans-serif; /* Ensure a font is set */
+  font-family: var(--font-body);
+  padding: 1rem;
 }
 
-/* --- Layout & Typography --- */
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
   position: relative;
   z-index: var(--z-header);
-  background-color: var(--clr-body-bg); /* Matches body to look seamless */
 }
 
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--clr-text); /* High contrast for the brand name */
+  color: var(--clr-text);
   text-decoration: none;
+  font-family: var(--font-logo);
 }
 
-/* --- Mobile Menu --- */
+/*Dropdown menu*/
+
 .primary-navigation {
   position: fixed;
   inset: 0; 
   z-index: var(--z-overlay);
   padding-top: 5rem;
   
-  /* Using your "Primary" color as the menu background */
   background: var(--clr-surface); 
   
   transform: translateX(100%);
-  transition: transform 350ms ease-out;
+  transition: transform 300ms ease-out;
 }
 
 .primary-navigation[data-visible="true"] {
@@ -67,7 +71,6 @@ header {
   color: var(--clr-text);
   text-decoration: none;
   
-  /* Subtle border using the text color with low opacity for elegance */
   border-bottom: 1px solid rgba(57, 62, 70, 0.1); 
   transition: color 0.2s;
 }
@@ -78,7 +81,7 @@ header {
     background: rgba(255,255,255, 0.5); /* Slight lighten on hover */
 }
 
-/* --- Navigation Toggle (Hamburger) --- */
+/* Navigation Toggle */
 .nav-toggle {
   display: block;
   background: transparent;
@@ -94,12 +97,11 @@ header {
   display: block;
   width: 2rem;
   height: 3px;
-  background: var(--clr-text); /* Charcoal bars */
+  background: var(--clr-text);
   border-radius: 1px;
   transition: transform 0.3s ease-in-out, background 0.3s;
 }
 
-/* Add a pop of color to the hamburger when hovered */
 .nav-toggle:hover .hamburger,
 .nav-toggle:hover .hamburger::before,
 .nav-toggle:hover .hamburger::after {
@@ -116,12 +118,27 @@ header {
 .hamburger::before { transform: translateY(-0.6rem); }
 .hamburger::after  { transform: translateY(0.6rem); }
 
-/* --- Active Hamburger State --- */
 .nav-toggle[aria-expanded="true"] .hamburger { background: transparent; }
 .nav-toggle[aria-expanded="true"] .hamburger::before { transform: rotate(45deg); }
 .nav-toggle[aria-expanded="true"] .hamburger::after { transform: rotate(-45deg); }
 
-/* --- Desktop View --- */
+/* Post card*/
+
+article.card {
+    background-color: var(--clr-surface);
+}
+
+.bar {
+
+  width: 50%;
+  
+  border-bottom: 1px solid var(--clr-accent);
+  
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* Desktop View */
 @media (min-width: 600px) {
   .nav-toggle { display: none; }
 
@@ -148,9 +165,9 @@ header {
     font-weight: 500;
   }
   
-  /* Desktop Hover Effect */
   .primary-navigation a:hover {
-    color: var(--clr-accent); /* The Blue-Grey shines here */
+    color: var(--clr-accent);
     background: transparent;
   }
+
 }
