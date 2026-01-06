@@ -5,6 +5,8 @@
     --clr-surface: #EEEEEE;
     --clr-accent:  #929AAB;
     --clr-text:    #393E46;
+    --bar-color: #393E4633;
+    --clr-highlight: #880808;
 
 
     --font-logo: 'DM Serif Display', serif;
@@ -38,11 +40,23 @@ header {
 }
 
 .logo {
-    font-size: 1.5rem;
     font-weight: bold;
-    color: var(--clr-text);
+    color: var(--clr-highlight);
     text-decoration: none;
     font-family: var(--font-logo);
+}
+
+header .logo {
+    font-size: 1.5rem
+}
+
+aside .logo {
+    font-size: 2.1rem;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
 }
 
 /*Dropdown menu*/
@@ -163,8 +177,7 @@ header {
 .bar {
     height: 1px;
     width: 40px;
-    background-color: currentColor; 
-    opacity: 0.3;
+    background-color: var(--bar-color); 
     margin: 1rem 0;
 }
 
@@ -176,12 +189,12 @@ header {
 /* Desktop */
 @media (min-width: 800px) {
 
+
     .container {
         max-width: var(--max-width);
         margin-inline: auto;
         padding-inline: var(--screen-edge);
-}
-
+    }
 
     .main-layout {
         display: flex;
@@ -194,9 +207,23 @@ header {
 
     .sidebar {
         width: 280px;
-        flex-shrink:0;
+        flex-shrink: 0;
         overflow-y: auto;
-        border-right: 1px solid black;
+        position: relative; 
+        padding-right: 20px; 
+    }
+
+    .sidebar::after {
+        content: "";
+        position: absolute;
+        right: 20px; 
+        top: 50%;
+        transform: translateY(-80%);
+
+        width: 1px;
+        height: 70%;
+        background-color: var(--bar-color);
+        z-index: 10; 
     }
 
     .main-content {
