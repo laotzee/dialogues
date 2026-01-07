@@ -10,6 +10,10 @@
         <title>{% block title %}Generic title{% endblock title %}</title>
 
         <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet">
+
+        <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='img/icon.png')}}">
+        <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='img/icon.svg')}}">
+
         <script src="{{url_for('static', filename='js/main.js')}}" defer></script>
     </head>
 

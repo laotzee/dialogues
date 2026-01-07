@@ -1,5 +1,7 @@
 <header class="container">
-    <a class="logo" href="{{url_for('blueprint.get_all_posts')}}">Dialogues</a>
+    <a class="logo" href="{{url_for('blueprint.get_all_posts')}}">
+        <img class="logo-img" src="{{url_for('static', filename='img/logo.svg')}}"></img>
+    </a>
 
     <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
         <span class="hamburger"></span>
