@@ -146,6 +146,46 @@ aside .logo {
     gap: 2rem;
 }
 
+.button {
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1.5rem;
+
+    background-color: var(--clr-text);
+    color: var(--clr-body-bg, #ffffff);
+
+    border-radius: 8px;
+    border: 0px solid rgba(0,0,0,0.1);
+    
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
+}
+
+.button:hover {
+    filter: brightness(0.9);
+    transform: translateY(-1px); /* Slight lift effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.button:active {
+    transform: translateY(0);
+    filter: brightness(0.9);
+}
+
+.button:focus-visible {
+    outline: 2px solid var(--clr-primary, #007bff);
+    outline-offset: 2px;
+}
+
+.button.dono {
+    background-color: var(--clr-highlight);
+    color: var(--clr-body-bg);
+}
+
 .card {
     background-color: var(--clr-surface);
     display: flex;
