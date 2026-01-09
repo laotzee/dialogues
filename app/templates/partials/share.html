@@ -1,0 +1,20 @@
+<section class="share-widget" aria-labelledby="share-title">
+    <h3 id="share-title">Share this post</h3>
+    <div class="share-buttons">
+        <a href="https://wa.me/?text=[URL_ENCODED_LINK]" class="share-btn whatsapp" target="_blank" aria-label="Share on WhatsApp">
+            <span>WhatsApp</span>
+        </a>
+
+        <a href="https://www.facebook.com/sharer/sharer.php?u=[URL_ENCODED_LINK]" class="share-btn facebook" target="_blank" aria-label="Share on Facebook">
+            <span>Facebook</span>
+        </a>
+
+        <a href="mailto:?subject=Check this out!&body=[URL_ENCODED_LINK]" class="share-btn email" aria-label="Share via Email">
+            <span>Email</span>
+        </a>
+
+        <button onclick="copyToClipboard()" class="share-btn instagram" id="copyBtn" aria-label="Copy link for Instagram">
+            <span id="btnText">Copy Link</span>
+        </button>
+    </div>
+</section>
