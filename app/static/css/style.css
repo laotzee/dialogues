@@ -5,7 +5,7 @@
     --clr-surface: #EEEEEE;
     --clr-accent:  #929AAB;
     --clr-text:    #393E46;
-    --bar-color: #393E4633;
+    --clr-bar: #393E4633;
     --clr-highlight: #880808;
 
 
@@ -187,11 +187,11 @@ aside .logo {
 }
 
 .card {
-    background-color: var(--clr-surface);
     display: flex;
     flex-direction: column;
     padding: 1.5rem;
     border-radius: 8px;
+    border: 1px solid var(--clr-bar);
 }
 
 .article-metadata {
@@ -217,7 +217,7 @@ aside .logo {
 .bar {
     height: 1px;
     width: 40px;
-    background-color: var(--bar-color); 
+    background-color: var(--clr-bar); 
     margin: 1rem 0;
 }
 
@@ -262,7 +262,7 @@ aside .logo {
 
         width: 1px;
         height: 70%;
-        background-color: var(--bar-color);
+        background-color: var(--clr-bar);
         z-index: 10; 
     }
 
