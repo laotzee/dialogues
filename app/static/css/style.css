@@ -95,11 +95,10 @@ aside .logo {
 
 .primary-navigation a:hover,
 .primary-navigation a:focus {
-    color: var(--clr-accent); /* Blue-grey on hover */
-    background: rgba(255,255,255, 0.5); /* Slight lighten on hover */
+    color: var(--clr-accent);
+    background: rgba(255,255,255, 0.5);
 }
 
-/* Navigation Toggle */
 .nav-toggle {
     display: block;
     background: transparent;
@@ -142,7 +141,7 @@ aside .logo {
 
 .blog-container {
     display: grid;
-    grid-template-columns: 1fr; /* Mobile: Single column */
+    grid-template-columns: 1fr;
     gap: 2rem;
 }
 
@@ -167,8 +166,9 @@ aside .logo {
 
 .button:hover {
     filter: brightness(0.9);
-    transform: translateY(-1px); /* Slight lift effect */
+    transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    opacity: 0.9;
 }
 
 .button:active {
@@ -192,6 +192,53 @@ aside .logo {
     padding: 1.5rem;
     border-radius: 8px;
     border: 1px solid var(--clr-bar);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.widget {
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border: 1px solid var(--clr-bar);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.sub-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sub-form input {
+    border: none;
+    border-bottom: 2px solid var(--clr-bar);
+    padding: 10px 0;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.sub-form input:focus {
+    border-bottom-color: var(--clr-text); 
+}
+
+.sub {
+    justify-content: center;
+
+}
+
+.author {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.author img {
+      width: 100px;
+      height: 100px;
+      border-radius: 10%;
+      object-fit: cover;
 }
 
 .article-metadata {
@@ -228,7 +275,6 @@ aside .logo {
 
 /* Desktop */
 @media (min-width: 800px) {
-
 
     .container {
         max-width: var(--max-width);
@@ -309,6 +355,27 @@ aside .logo {
     }
 
     .card{
+    }
+
+    .widget {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .sub-content {
+        flex: 1;
+    }
+
+    .sub-form {
+        flex: 1.5;
+        display: flex;
+        gap: 10px;
+    }
+
+    .sub-form input {
+        flex: 1;
+        padding: 10px;
     }
 
 }
