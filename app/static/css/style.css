@@ -55,6 +55,7 @@ header .logo {
     font-size: 1.5rem
 }
 
+
 aside .logo {
     font-size: 2.1rem;
 }
@@ -62,6 +63,16 @@ aside .logo {
 .logo-img {
     height: 50px;
     width: auto;
+}
+
+.category-menu {
+    display: flex;
+    gap: 40px;
+
+}
+
+.category-menu  .active{
+    font-weight: 600;
 }
 
 /*Dropdown menu*/
@@ -167,6 +178,24 @@ aside .logo {
     font-weight: 600;
     transition: all 0.2s ease-in-out;
     user-select: none;
+}
+
+.category-filters button{
+    cursor: pointer;
+    background-color: var(--clr-body-bg);
+    border: 0px solid black;
+}
+
+.category-filters li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.category-filters ul {
+    display: flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 .button:hover {
@@ -290,6 +319,7 @@ aside .logo {
     .main-layout {
         display: flex;
         flex-direction: row;
+
         overflow:hidden;
         max-width: 1400px;
         margin-inline: auto;
@@ -383,5 +413,11 @@ aside .logo {
         flex: 1;
         padding: 10px;
     }
+
+    .category-filters {}
+    .category-filters ul {
+        display: block;
+    }
+    .category-filters {}
 
 }

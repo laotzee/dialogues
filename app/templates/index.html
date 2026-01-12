@@ -10,6 +10,23 @@
     <p>A blog on human experience</p>
     <a class="button">Versión en Español</a>
     <div class="bar"></div>
+    <nav class="category-filters" aria-label="Blog categories">
+        <ul class="category-menu">
+                <li>
+                    <button class="category-item active" data-category="all">All</button>
+                </li>
+                <li>
+                    <button class="category-item" data-category="post">Post</button>
+                </li>
+                <li>
+                    <button class="category-item" data-category="poem">Poem</button>
+                </li>
+                <li>
+                    <button class="category-item" data-category="story">Story</button>
+                </li>
+        </ul>
+    </nav>
+</aside>
 {% endblock %}
 
 {% block main %}
