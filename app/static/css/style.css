@@ -164,8 +164,6 @@ aside .logo {
 .button {
     font-family: inherit;
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
     padding: 0.7rem 1.5rem;
 
     background-color: var(--clr-text);
@@ -227,12 +225,13 @@ aside .logo {
     border-radius: 8px;
     border: 1px solid var(--clr-bar);
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    gap: 10px;
 }
-
 .widget {
     padding: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
+    overflow: hidden;
     border: 1px solid var(--clr-bar);
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
@@ -320,19 +319,18 @@ aside .logo {
         display: flex;
         flex-direction: row;
 
-        overflow:hidden;
         max-width: 1400px;
         margin-inline: auto;
         padding-inline: 2rem;
-        gap: 3rem;
     } 
 
     .sidebar {
+        position: sticky; 
         width: 280px;
+        height: 100vh;
         flex-shrink: 0;
         overflow-y: auto;
-        position: relative; 
-        padding-right: 20px; 
+        top: 0px;
     }
 
     .sidebar::after {
@@ -352,7 +350,6 @@ aside .logo {
         flex:1;
         min-width:0;
         overflow-y:auto;
-
     }
   
     .nav-toggle { display: none; }
