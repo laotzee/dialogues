@@ -29,6 +29,11 @@ body {
     padding-inline: 1.25rem;
 }
 
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
 
 header {
     display: flex;
@@ -284,6 +289,7 @@ aside .logo {
 
     .main-layout {
         display: flex;
+        flex-direction: row;
         overflow:hidden;
         max-width: 1400px;
         margin-inline: auto;
