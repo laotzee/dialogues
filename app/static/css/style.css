@@ -159,12 +159,14 @@ aside .logo {
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
+    align-items: start;
 }
 
 .button {
     font-family: inherit;
     display: inline-flex;
     padding: 0.7rem 1.5rem;
+    text-decoration: none;
 
     background-color: var(--clr-text);
     color: var(--clr-body-bg, #ffffff);
@@ -218,6 +220,14 @@ aside .logo {
     color: var(--clr-body-bg);
 }
 
+.article-button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 16px;
+}
+
+
 .card {
     display: flex;
     flex-direction: column;
@@ -227,6 +237,14 @@ aside .logo {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     gap: 10px;
 }
+
+.card p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; 
+    overflow: hidden;
+}
+
 .widget {
     padding: 20px;
     margin-top: 30px;
@@ -318,7 +336,6 @@ aside .logo {
     .main-layout {
         display: flex;
         flex-direction: row;
-
         max-width: 1400px;
         margin-inline: auto;
         padding-inline: 2rem;
@@ -352,7 +369,9 @@ aside .logo {
         overflow-y:auto;
     }
   
-    .nav-toggle { display: none; }
+    .nav-toggle { 
+        display: none; 
+    }
 
     .primary-navigation {
     position: static;
@@ -387,9 +406,6 @@ aside .logo {
         justify-content: space-evenly; 
     }
 
-    .card{
-    }
-
     .widget {
         display: flex;
         align-items: center;
@@ -411,10 +427,7 @@ aside .logo {
         padding: 10px;
     }
 
-    .category-filters {}
     .category-filters ul {
         display: block;
     }
-    .category-filters {}
-
 }
