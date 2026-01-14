@@ -3,18 +3,20 @@
         <img class="logo-img" src="{{url_for('static', filename='img/logo.svg')}}"></img>
     </a>
 
-    <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
-        <span class="hamburger"></span>
-    </button>
-
-    <nav class="primary-navigation" id="primary-navigation" data-visible="false">
-        <ul>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('blueprint.about') }}">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('blueprint.contact') }}">Contact</a>
-             </li>
-        </ul>
-    </nav>
+    <div class="nav-container">
+        <a class="button dono pulse-button">Support</a>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-navigation">
+            <span class="hamburger"></span>
+        </button>
+        <nav class="primary-navigation" id="primary-navigation" data-visible="false">
+            <ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('blueprint.about') }}">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('blueprint.contact') }}">Contact</a>
+                 </li>
+            </ul>
+        </nav>
+    </div>
 </header>
