@@ -1,96 +1,93 @@
-
-from typing import Optional
 from datetime import datetime
-from sqlalchemy import ForeignKey, String, DateTime, Text, Boolean, Integer
+import re
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import String, Text, DateTime, ForeignKey, Table, Column, MetaData, event
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
-from ..extensions import db
-from flask_login import UserMixin
+from ..extensions import db, Base
 
+post_tags = Table(
+    "post_tags",
+    Base.metadata,
+    Column("post_id", ForeignKey("posts.id", ondelete="CASCADE"), primary_key=True),
+    Column("tag_id", ForeignKey("tags.id", ondelete="CASCADE"), primary_key=True),
+)
 
-##CONFIGURE TABLES
-
-class User(db.Model, UserMixin):
-
-    __tablename__ = 'user'
+class User(db.Model):
+    """Models a user"""
+    __tablename__ = "users"
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(250), unique=True)
-    username: Mapped[str] =  mapped_column(String(250), unique=True)
-    password: Mapped[str] = mapped_column(String(250))
-    name: Mapped[str | None] =  mapped_column(String(250))
-    #user_role: Mapped[int] =  mapped_column(Integer) #Reference to a different table... or a new class???
-    #is_active: Mapped[bool] =  mapped_column(Boolean)
-    posts: Mapped[list['Post']] = relationship(
-            back_populates='author',
-            cascade='all, delete-orphan'
-            )
-    comments: Mapped[list['Comment']] = relationship(
-            back_populates='user',
-            cascade='all, delete-orphan',
-            )
-    created_at: Mapped[datetime] = mapped_column(
-            DateTime(timezone=True),
-            default=func.now(),
-            )
-    updated_at: Mapped[datetime] = mapped_column(
-            DateTime(timezone=True),
-            default=func.now(),
-            onupdate=func.now(),
-            )
+    username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
+    posts: Mapped[list["Post"]] = relationship(back_populates="author")
+
+class PostType(db.Model):
+    """Models the type of a post"""
+    __tablename__ = "post_types"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True, index=True)
+    posts: Mapped[list["Post"]] = relationship(back_populates="content_type")
+
+class Tag(db.Model):
+    """Models the tag for posts"""
+    __tablename__ = "tags"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True)
+    slug: Mapped[str] = mapped_column(String(50), unique=True, index=True)
 
 class Post(db.Model):
-    __tablename__ = 'post'
+    """Models a blog post"""
+    __tablename__ = "posts"
     id: Mapped[int] = mapped_column(primary_key=True)
-    author_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    title: Mapped[str] = mapped_column(String(250), unique=True, nullable=False)
-    subtitle: Mapped[str] = mapped_column(String(250))
-    body: Mapped[str] = mapped_column(Text, nullable=False)
-    summary: Mapped[Optional[str]] = mapped_column(Text)
-    author: Mapped['User'] = relationship(back_populates='posts')
-    comments: Mapped[list['Comment']] = relationship(back_populates='post')
-    created_at: Mapped[datetime] = mapped_column(
+    title: Mapped[str] = mapped_column(String(200))
+    body: Mapped[str] = mapped_column(Text)
+    is_published: Mapped[bool] = mapped_column(default=False, index=True)
+    slug: Mapped[str] = mapped_column(String(200), unique=True, index=True)
+    created: Mapped[datetime] = mapped_column(
             DateTime(timezone=True),
             default=func.now(),
+            index=True,
             )
-    updated_at: Mapped[datetime] = mapped_column(
+    updated: Mapped[datetime] = mapped_column(
             DateTime(timezone=True),
             default=func.now(),
             onupdate=func.now(),
             )
 
-    # Direct reference to the user instance who create the post
-    # Like a handle
-    # ID reference to the user who created the post
-#    user_id: Mapped[int] = mapped_column(teger, ForeignKey('user.id'))
-#    user: Mapped[User] = relationship('User', back_populates='posts')
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    type_id: Mapped[int] = mapped_column(ForeignKey("post_types.id"), index=True)
 
-    # List of comments in a particular post
+    author: Mapped["User"] = relationship(back_populates="posts")
+    content_type: Mapped["PostType"] = relationship(back_populates="posts")
+    tags: Mapped[list["Tag"]] = relationship(secondary=post_tags, backref="posts")
 
-class Comment(db.Model):
-    __tablename__ = 'comments'
+def generate_unique_slug(target, value, column_name='slug'):
+    """Generates a unique slug for any model"""
+    if not value:
+        return
+        
+    base_slug = slugify(value)
+    slug = base_slug
+    counter = 1
 
+    session = db.object_session(target)
+    klass = target.__class__
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    content: Mapped[str] = mapped_column(String(500), nullable=False)
+    while session.query(klass).filter(getattr(klass, column_name) == slug).first():
+        existing = session.query(klass).filter(getattr(klass, column_name) == slug).first()
+        if existing and existing.id == target.id:
+            break
+            
+        slug = f"{base_slug}-{counter}"
+        counter += 1
 
-    # ID reference to the blog which holds the comment
-    # Direct reference to the post which holds the comment
-    post_id: Mapped[int] = mapped_column(ForeignKey('post.id'))
-    post: Mapped['Post'] = relationship(back_populates='comments')
-    # Direct reference to the user instance who create the comment
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    user: Mapped['User'] = relationship(back_populates='comments')
-    created_at: Mapped[datetime] = mapped_column(
-            DateTime(timezone=True),
-            default=func.now(),
-            )
-    updated_at: Mapped[datetime] = mapped_column(
-            DateTime(timezone=True),
-            default=func.now(),
-            onupdate=func.now(),
-            )
+    return slug
 
+@event.listens_for(Tag, 'before_insert')
+@event.listens_for(Tag, 'before_update')
+def receive_tag_slug(mapper, connection, target):
+    target.slug = generate_unique_slug(target, target.name)
 
-#    with app.app_context():
-#        db.create_all()
-
+@event.listens_for(Post, 'before_insert')
+@event.listens_for(Post, 'before_update')
+def receive_post_slug(mapper, connection, target):
+    target.slug = generate_unique_slug(target, target.title)

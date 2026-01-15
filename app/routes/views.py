@@ -1,12 +1,11 @@
 from .helpers import *
 from ..extensions import login_manager, db
 from ..forms import CreatePostForm, RegisterForm, LogInForm, CommentForm, ContactForm
-from ..models.models import User, Post, Comment
+from ..models.models import User, Post, Tag, PostType
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 from flask_login import login_user, login_required, current_user, logout_user
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-
 
 def process_home() -> str:
     posts = Post.query.all()

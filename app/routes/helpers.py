@@ -1,6 +1,6 @@
 from  ..extensions import login_manager, db
 from werkzeug.security import generate_password_hash, check_password_hash
-from ..models.models import User, Post, Comment
+from ..models.models import User, Post, Tag, PostType
 from functools import wraps
 from sqlalchemy import select
 from flask import request
