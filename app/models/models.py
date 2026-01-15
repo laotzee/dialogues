@@ -20,6 +20,13 @@ class User(db.Model):
     username: Mapped[str] = mapped_column(String(50), unique=True, nullable=False)
     posts: Mapped[list["Post"]] = relationship(back_populates="author")
 
+class Lang(db.Model):
+    """Models the language of a post"""
+    __tablename__ = "languages"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(String(2), unique=True, index=True)
+    name: Mapped[str] = mapped_column(String(10), unique=True)
+
 class PostType(db.Model):
     """Models the type of a post"""
     __tablename__ = "post_types"
@@ -54,6 +61,7 @@ class Post(db.Model):
             )
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    lang_id: Mapped[int] = mapped_column(ForeignKey("languages.id"))
     type_id: Mapped[int] = mapped_column(ForeignKey("post_types.id"), index=True)
 
     author: Mapped["User"] = relationship(back_populates="posts")
