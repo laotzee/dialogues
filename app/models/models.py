@@ -1,8 +1,8 @@
 from datetime import datetime
-import re
+import re, markdown 
 from slugify import slugify
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Text, DateTime, ForeignKey, Table, Column, MetaData, event
+from sqlalchemy import event, inspect, String, Text, DateTime, ForeignKey, Table, Column, MetaData
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from ..extensions import db, Base
@@ -92,6 +92,10 @@ def generate_unique_slug(target, value, column_name='slug'):
 
     return slug
 
+def generate_html(content):
+    """Generates the HTML render of a post"""
+    return markdown.markdown(content) if content else ""
+
 @event.listens_for(Tag, 'before_insert')
 @event.listens_for(Tag, 'before_update')
 def receive_tag_slug(mapper, connection, target):
@@ -101,3 +105,14 @@ def receive_tag_slug(mapper, connection, target):
 @event.listens_for(Post, 'before_update')
 def receive_post_slug(mapper, connection, target):
     target.slug = generate_unique_slug(target, target.title)
+
+@event.listens_for(Post, 'before_insert')
+def handle_before_insert(mapper, connection, target):
+    target.body_html = generate_html(target.body_markdown)
+
+@event.listens_for(Post, 'before_update')
+def handle_before_update(mapper, connection, target):
+    body_history = inspect(target).attrs.body_markdown.history
+    
+    if body_history.has_changes():
+        target.body_html = generate_html(target.body_markdown)
