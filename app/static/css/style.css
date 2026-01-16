@@ -1,6 +1,19 @@
 @import url('fonts.css');
 
 :root {
+
+    --base-size: 1rem; /* 16px */
+    --ratio: 1.15;
+
+    --s-h1: calc(var(--s-h2) * var(--ratio));
+    --s-h2: calc(var(--s-h3) * var(--ratio));
+    --s-h3: calc(var(--s-h4) * var(--ratio));
+    --s-h4: calc(var(--base-size) * var(--ratio));
+    --s-small: calc(var(--base-size) / var(--ratio));
+
+    --lh-heading: 1.15;
+    --lh-body: 1.6;
+
     --clr-body-bg: #F7F7F7;
     --clr-surface: #EEEEEE;
     --clr-accent:  #929AAB;
@@ -25,14 +38,10 @@ body {
     background-color: var(--clr-body-bg);
     color: var(--clr-text);
     margin: 0;
+    font-size: var(--base-size);
+    line-height: var(--lh-body);
     font-family: var(--font-body);
     padding-inline: 1.25rem;
-}
-
-.main-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
 }
 
 header {
@@ -44,20 +53,67 @@ header {
     padding-block: 2rem;
 }
 
+h1, h2, h3, h4 {
+  line-height: var(--lh-heading);
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: var(--s-h1);
+  letter-spacing: -0.04em;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: var(--s-h2);
+  letter-spacing: -0.03em;
+}
+
+h3 {
+  font-size: var(--s-h3);
+  letter-spacing: -0.02em;
+}
+
+h4 {
+  font-size: var(--s-h4);
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin-bottom: 1.5rem;
+}
+
+small {
+  font-size: var(--s-small);
+  letter-spacing: 0.01em;
+}
+
+aside h1, aside h2, aside h3 {
+  letter-spacing: 0;
+  margin-top: 1.5rem;
+}
+
+aside p {
+  line-height: 1.4;
+}
+
+aside .logo {
+    font-size: 2.1rem;
+}
+
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
 .logo {
     font-weight: bold;
     color: var(--clr-highlight);
     text-decoration: none;
     font-family: var(--font-logo);
-}
-
-header .logo {
-    font-size: 1.5rem
-}
-
-
-aside .logo {
-    font-size: 2.1rem;
 }
 
 .logo-img {
@@ -68,14 +124,15 @@ aside .logo {
 .category-menu {
     display: flex;
     gap: 40px;
-
 }
 
 .category-menu  .active{
     font-weight: 600;
 }
 
-/*Dropdown menu*/
+.category-item {
+    color: var(--clr-text);
+}
 
 .primary-navigation {
     position: fixed;
@@ -169,24 +226,6 @@ aside .logo {
     align-items: start;
 }
 
-.button {
-    font-family: inherit;
-    display: inline-flex;
-    padding: 0.7rem 1.5rem;
-    text-decoration: none;
-
-    background-color: var(--clr-text);
-    color: var(--clr-body-bg, #ffffff);
-
-    border-radius: 8px;
-    border: 0px solid rgba(0,0,0,0.1);
-    
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s ease-in-out;
-    user-select: none;
-}
-
 .category-filters button{
     cursor: pointer;
     background-color: var(--clr-body-bg);
@@ -203,6 +242,24 @@ aside .logo {
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+
+.button {
+    font-family: inherit;
+    display: inline-flex;
+    padding: 0.7rem 1.5rem;
+    text-decoration: none;
+
+    background-color: var(--clr-text);
+    color: var(--clr-body-bg, #ffffff);
+
+    border-radius: 8px;
+    border: 0px solid rgba(0,0,0,0.1);
+    
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+    user-select: none;
 }
 
 .button:hover {
@@ -234,7 +291,6 @@ aside .logo {
     margin-top: 16px;
 }
 
-
 .card {
     display: flex;
     flex-direction: column;
@@ -245,7 +301,14 @@ aside .logo {
     gap: 10px;
 }
 
+.card h2 {
+    margin: 0.5rem 0;
+    font-size: 1.5rem;
+    line-height: 1.2;
+}
+
 .card p {
+    margin: 0;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3; 
@@ -313,22 +376,11 @@ aside .logo {
     margin: 0;
 }
 
-.card h2 {
-    margin: 0.5rem 0;
-    font-size: 1.5rem;
-    line-height: 1.2;
-}
-
 .bar {
     height: 1px;
     width: 40px;
     background-color: var(--clr-bar); 
     margin: 1rem 0;
-}
-
-.card p {
-    margin: 0;
-    line-height: 1.5;
 }
 
 .pulse-button {
@@ -366,9 +418,16 @@ aside .logo {
   }
 }
 
-
 /* Desktop */
 @media (min-width: 800px) {
+
+    :root {
+    --scale: 1.25;
+    }
+    
+    p {
+        max-width: 70ch;
+    }
 
     .container {
         max-width: var(--max-width);
@@ -384,9 +443,14 @@ aside .logo {
         padding-inline: 2rem;
     } 
 
+    .blog-container {
+        grid-template-columns: repeat(2, 1fr);
+        justify-content: space-evenly; 
+    }
+
     .sidebar {
         position: sticky; 
-        width: 280px;
+        width: 250px;
         height: 100vh;
         flex-shrink: 0;
         overflow-y: auto;
@@ -444,11 +508,6 @@ aside .logo {
     background: transparent;
     }
     
-    .blog-container {
-        grid-template-columns: repeat(2, 1fr);
-        justify-content: space-evenly; 
-    }
-
     .widget {
         display: flex;
         align-items: center;
