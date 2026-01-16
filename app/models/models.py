@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+from slugify import slugify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import String, Text, DateTime, ForeignKey, Table, Column, MetaData, event
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
@@ -38,7 +39,7 @@ class Tag(db.Model):
     """Models the tag for posts"""
     __tablename__ = "tags"
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(50), unique=True)
+    name: Mapped[str] = mapped_column(String(50), unique=True, index=True)
     slug: Mapped[str] = mapped_column(String(50), unique=True, index=True)
 
 class Post(db.Model):
@@ -46,7 +47,8 @@ class Post(db.Model):
     __tablename__ = "posts"
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(200))
-    body: Mapped[str] = mapped_column(Text)
+    body_markdown: Mapped[str] = mapped_column(Text)
+    body_html: Mapped[str] = mapped_column(Text)
     is_published: Mapped[bool] = mapped_column(default=False, index=True)
     slug: Mapped[str] = mapped_column(String(200), unique=True, index=True)
     created: Mapped[datetime] = mapped_column(
