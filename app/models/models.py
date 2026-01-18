@@ -7,6 +7,8 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from ..extensions import db, Base
 
+excerpt_len = 100
+
 post_tags = Table(
     "post_tags",
     Base.metadata,
@@ -47,8 +49,9 @@ class Post(db.Model):
     __tablename__ = "posts"
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(200))
-    body_markdown: Mapped[str] = mapped_column(Text)
+    body_raw: Mapped[str] = mapped_column(Text)
     body_html: Mapped[str] = mapped_column(Text)
+    excerpt: Mapped[str] = mapped_column(String(excerpt_len))
     is_published: Mapped[bool] = mapped_column(default=False, index=True)
     slug: Mapped[str] = mapped_column(String(200), unique=True, index=True)
     created: Mapped[datetime] = mapped_column(
@@ -107,12 +110,18 @@ def receive_post_slug(mapper, connection, target):
     target.slug = generate_unique_slug(target, target.title)
 
 @event.listens_for(Post, 'before_insert')
-def handle_before_insert(mapper, connection, target):
-    target.body_html = generate_html(target.body_markdown)
+def generate_post_html(mapper, connection, target):
+    target.body_html = generate_html(target.body_raw)
 
 @event.listens_for(Post, 'before_update')
-def handle_before_update(mapper, connection, target):
-    body_history = inspect(target).attrs.body_markdown.history
+def check_body_changes(mapper, connection, target):
+    body_history = inspect(target).attrs.body_raw.history
     
     if body_history.has_changes():
-        target.body_html = generate_html(target.body_markdown)
+        target.body_html = generate_html(target.body_raw)
+
+@event.listens_for(Post, 'before_insert')
+def generate_post_excerpt(mapper, connection, target):
+    
+    if not target.excerpt:
+        target.excerpt = target.body_raw[:excerpt_len-1]
