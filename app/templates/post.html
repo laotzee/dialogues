@@ -18,15 +18,8 @@
 <div class="body-post">
     {{post.body_html | safe }}
 </div>
-<div class="botton-post">
-    <div class="sharing-component"></div>
-    <div class="suscriber-component"></div>
-    <div class="author-component"></div>
-</div>
 
-<div class="comment-component">
-
-</div>
+{% include "partials/author.html"%}
 
 {% endblock %}
 
