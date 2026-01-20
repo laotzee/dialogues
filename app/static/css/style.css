@@ -353,6 +353,7 @@ aside .logo {
     display: flex;
     align-items: center;
     gap: 20px;
+    max-width: 70ch;
 }
 
 .author img {
