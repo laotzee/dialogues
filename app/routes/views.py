@@ -8,8 +8,10 @@ from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 
 def process_home() -> str:
-    posts = Post.query.all()
-    return render_template('index.html', all_posts=posts)
+    """Renders the index page passing posts in English"""
+    stmt = db.select(Post).where(Post.lang_id == 1)
+    posts = db.session.execute(stmt).scalars().all()
+    return render_template('index.html', posts=posts)
 
 def process_about():
     return render_template('about.html')
@@ -81,32 +83,12 @@ def process_logout() -> str:
     return redirect(url_for("blueprint.get_all_posts"))
 
 
-def show_post(post_id: int) -> str:
-    form = CommentForm()
+def show_post(slug: str) -> str:
 
-    if form.validate_on_submit():
+    stmt = db.select(Post).where(Post.slug == slug)
+    post = db.session.execute(stmt).scalar()
 
-        # add comment to the appropriate table
-        # Verify if the user if logged first
-
-        comment = request.form.get("comment")
-
-        new_comment =  Comments(
-            text=comment,
-            user_id=current_user.id,
-            post_id=post_id,
-        )
-
-        db.session.add(new_comment)
-        db.session.commit()
-
-    requested_post = Post.query.get(post_id)
-    return render_template(
-        "post.html",
-        post=requested_post,
-        form=form,
-        comments=requested_post.comments
-    )
+    return render_template("post.html", post=post)
 
 def delete_post(post_id: int) -> str:
     post_to_delete = Post.query.get(post_id)

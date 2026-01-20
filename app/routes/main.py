@@ -1,4 +1,6 @@
 from .views import *
+from ..models.models import Post
+from ..extensions import db
 
 blueprint = Blueprint('blueprint', __name__)
 
@@ -58,17 +60,9 @@ def posts_id(post_id: int) -> str:
     return page
 
 
-@blueprint.route("/posts", methods=["GET", "POST"])
-def posts() -> str:
+@blueprint.route("/posts/<string:slug>", methods=["GET"])
+def posts(slug) -> str:
     """Process general posts actions"""
-    if request.method == "GET": # show all posts
-        message = {"error": "The requested feature is not yet implemented."}
-        return jsonify(message), 501
-    elif request.method == "POST":
-        page = create_post()
-        return page
-    else:
-        message = {"error": "The requested feature is not yet implemented."}
-        return jsonify(message), 501
-
+    page = show_post(slug)
+    return page
 
