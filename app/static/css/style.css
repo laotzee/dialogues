@@ -121,16 +121,16 @@ aside .logo {
     width: auto;
 }
 
-.category-menu {
+.button-menu {
     display: flex;
     gap: 40px;
 }
 
-.category-menu  .active{
+.button-menu  .focused{
     font-weight: 600;
 }
 
-.category-item {
+.button-item {
     color: var(--clr-text);
 }
 
