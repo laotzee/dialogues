@@ -11,18 +11,18 @@
     <a href="" class="button">Versión en Español</a>
     <div class="bar"></div>
     <nav class="category-filters" aria-label="Blog categories">
-        <ul class="category-menu">
+        <ul class="button-menu">
                 <li>
-                    <button class="category-item active" data-category="all">All</button>
+                    <button class="button-item active" data-type="all">All</button>
                 </li>
                 <li>
-                    <button class="category-item" data-category="post">Post</button>
+                    <button class="button-item" data-type="post">Post</button>
                 </li>
                 <li>
-                    <button class="category-item" data-category="poem">Poem</button>
+                    <button class="button-item" data-type="poem">Poem</button>
                 </li>
                 <li>
-                    <button class="category-item" data-category="story">Story</button>
+                    <button class="button-item" data-type="story">Story</button>
                 </li>
         </ul>
     </nav>
@@ -31,19 +31,6 @@
 
 {% block main %}
     <div class='blog-container'>
-        {% for post in posts %}
-            <article class='card'>
-                <div class='article-metadata'>
-                    <p class='m'>{{post.content_type.name}}</p>
-                    <p class='m'>{{post.created.strftime("%B %d, %Y")}}</p>
-                </div>
-                <h2>{{post.title}}</h2>
-                <div class="bar"></div>
-                <p>{{post.excerpt}}</p>
-                <div class="article-button">
-                    <a href="{{url_for('blueprint.posts', slug=post.slug)}}" class="button">Read</a>
-                </div>
-            </article>
-        {% endfor %}
+        {% include "partials/cards.html"%}
     </div>
 {% endblock %}
