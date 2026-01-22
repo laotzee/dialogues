@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     container.innerHTML= html;
 
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+
                     container.classList.remove('loading');
                 }, 300);
 
