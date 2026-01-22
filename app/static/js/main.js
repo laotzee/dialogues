@@ -19,4 +19,31 @@ document.addEventListener('DOMContentLoaded', () => {
     } 
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const buttons = document.querySelectorAll('.button-item');
+    const container = document.querySelector('.blog-container');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', async () => {
+
+            const content_type = button.getAttribute('data-type');
+
+            buttons.forEach(btn => btn.classList.remove('focused'));
+            button.classList.add('focused');
+
+            try {
+                const response = await fetch(`/?type=${content_type}`, {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+                const html = await response.text();
+
+                // 3. Clear and Inject
+                container.innerHTML = html;
+            } catch (err) {
+                console.error("Error loading posts:", err);
+            }
+        });
+    });
+});
+
 

@@ -9,8 +9,26 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 def process_home() -> str:
     """Renders the index page passing posts in English"""
-    stmt = db.select(Post).where(Post.lang_id == 1)
+    query = request.args.get('type', 'all')
+
+    if query == 'all':
+        stmt = (
+                db.select(Post)
+                .where(Post.lang_id == 1)
+                )
+    else:
+        stmt = (
+                db.select(Post)
+                .join(Post.content_type)
+                .where(Post.lang_id == 1)
+                .where(PostType.name == query)
+                )
+
     posts = db.session.execute(stmt).scalars().all()
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return render_template('partials/cards.html', posts=posts)
+
     return render_template('index.html', posts=posts)
 
 def process_about():
