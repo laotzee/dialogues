@@ -26,7 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
     buttons.forEach(button => {
         button.addEventListener('click', async () => {
 
+            if (button.classList.contains('focused')) return;
+
             const content_type = button.getAttribute('data-type');
+
+            container.classList.add('loading');
 
             buttons.forEach(btn => btn.classList.remove('focused'));
             button.classList.add('focused');
@@ -35,12 +39,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(`/?type=${content_type}`, {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 });
+
                 const html = await response.text();
 
-                // 3. Clear and Inject
-                container.innerHTML = html;
+                setTimeout(() => {
+                    container.innerHTML= html;
+
+                    container.classList.remove('loading');
+                }, 300);
+
             } catch (err) {
                 console.error("Error loading posts:", err);
+                container.classList.remove('loading');
             }
         });
     });
