@@ -5,9 +5,9 @@ from ..extensions import db
 blueprint = Blueprint('blueprint', __name__)
 
 @blueprint.route('/')
-def get_all_posts():
+def index():
     """Route for home page"""
-    page = process_home()
+    page = process_index()
     return page
 
 

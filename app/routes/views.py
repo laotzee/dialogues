@@ -3,7 +3,7 @@ from ..extensions import db
 from ..models.models import User, Post, Tag, PostType
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 
-def process_home() -> str:
+def process_index() -> str:
     """Renders the index page passing posts in English"""
     query = request.args.get('type', 'all')
     page = request.args.get('page', 1, type=int)
@@ -65,7 +65,7 @@ def process_login() -> str:
         if user:
             if check_password_hash(user.password, password):
                 login_user(user)
-                return redirect(url_for("blueprint.get_all_posts"))
+                return redirect(url_for("blueprint.index"))
             else:
                 flash("Incorrect password", "error")
         else:
@@ -92,14 +92,14 @@ def process_register() -> str:
             hashed_password = hash_password(password)
             new_user = create_user(username, password, email)
             login_user(new_user)
-            return redirect(url_for("blueprint.get_all_posts"))
+            return redirect(url_for("blueprint.index"))
 
     return render_template("register.html", form=form)
 
 
 def process_logout() -> str:
     logout_user()
-    return redirect(url_for("blueprint.get_all_posts"))
+    return redirect(url_for("blueprint.index"))
 
 
 def show_post(slug: str) -> str:
