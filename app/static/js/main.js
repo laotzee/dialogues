@@ -1,64 +1,72 @@
 document.addEventListener('DOMContentLoaded', () => {
-    
+
+    const blogContainer = document.querySelector('.blog-container');
     const navToggle = document.querySelector('.nav-toggle');
     const primaryNav = document.querySelector('.primary-navigation');
+    const filterButtons = document.querySelectorAll('.button-item');
 
-    if (navToggle && primaryNav) {
+    async function updateBlogContent(url) {
+        if (!blogContainer) return;
 
-        navToggle.addEventListener('click', () => {
-            const isVisible = primaryNav.getAttribute('data-visible') === 'true';
+        blogContainer.classList.add('loading');
 
-            if (isVisible) {
-                primaryNav.setAttribute('data-visible', 'false');
-                navToggle.setAttribute('aria-expanded', 'false');
-            } else {
-                primaryNav.setAttribute('data-visible', 'true');
-                navToggle.setAttribute('aria-expanded', 'true');
-            }
-        });
-    } 
-});
+        try {
+            const response = await fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.button-item');
-    const container = document.querySelector('.blog-container');
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const html = await response.text();
 
-    buttons.forEach(button => {
-        button.addEventListener('click', async () => {
-
-            if (button.classList.contains('focused')) return;
-
-            const content_type = button.getAttribute('data-type');
-
-            container.classList.add('loading');
-
-            buttons.forEach(btn => btn.classList.remove('focused'));
-            button.classList.add('focused');
-
-            try {
-                const response = await fetch(`/?type=${content_type}`, {
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            setTimeout(() => {
+                blogContainer.innerHTML = html;
+                
+                requestAnimationFrame(() => {
+                    blogContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
 
-                const html = await response.text();
+                blogContainer.classList.remove('loading');
+            }, 300);
 
-                setTimeout(() => {
-                    container.innerHTML= html;
+        } catch (err) {
+            console.error("Content update failed:", err);
+            blogContainer.classList.remove('loading');
+        }
+    }
 
-                    window.scrollTo({
-                        top: 0,
-                        behavior: 'smooth'
-                    });
+    if (navToggle && primaryNav) {
+        navToggle.addEventListener('click', () => {
+            const isVisible = primaryNav.getAttribute('data-visible') === 'true';
+            
+            primaryNav.setAttribute('data-visible', !isVisible);
+            navToggle.setAttribute('aria-expanded', !isVisible);
+        });
+    }
 
-                    container.classList.remove('loading');
-                }, 300);
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            if (button.classList.contains('focused')) return;
 
-            } catch (err) {
-                console.error("Error loading posts:", err);
-                container.classList.remove('loading');
-            }
+            filterButtons.forEach(btn => btn.classList.remove('focused'));
+            button.classList.add('focused');
+
+            const contentType = button.getAttribute('data-type');
+            updateBlogContent(`/?type=${contentType}`);
         });
     });
+
+    document.addEventListener('click', (e) => {
+        const pageBtn = e.target.closest('#pagination-nav .page-link');
+        
+        if (!pageBtn) return;
+
+        const isInactive = pageBtn.parentElement.classList.contains('active') || 
+                           pageBtn.parentElement.classList.contains('disabled');
+
+        if (!isInactive) {
+            const pageNum = pageBtn.dataset.page;
+            updateBlogContent(`/?page=${pageNum}`);
+        }
+    });
 });
-
-
