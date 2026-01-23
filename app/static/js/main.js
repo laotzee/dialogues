@@ -23,7 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 blogContainer.innerHTML = html;
                 
                 requestAnimationFrame(() => {
-                    blogContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    requestAnimationFrame(() => {
+                        window.scrollTo({
+                            top: 0,
+                            left: 0,
+                            behavior: 'smooth'
+                        });
+                    });
                 });
 
                 blogContainer.classList.remove('loading');
