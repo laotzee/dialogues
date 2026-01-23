@@ -1,20 +1,19 @@
 from .helpers import *
-from ..extensions import login_manager, db
-from ..forms import CreatePostForm, RegisterForm, LogInForm, CommentForm, ContactForm
+from ..extensions import db
 from ..models.models import User, Post, Tag, PostType
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
-from flask_login import login_user, login_required, current_user, logout_user
-from functools import wraps
-from werkzeug.security import generate_password_hash, check_password_hash
 
 def process_home() -> str:
     """Renders the index page passing posts in English"""
     query = request.args.get('type', 'all')
+    page = request.args.get('page', 1, type=int)
+
 
     if query == 'all':
         stmt = (
                 db.select(Post)
                 .where(Post.lang_id == 1)
+                .order_by(Post.created.desc(), Post.id.desc())
                 )
     else:
         stmt = (
@@ -22,12 +21,14 @@ def process_home() -> str:
                 .join(Post.content_type)
                 .where(Post.lang_id == 1)
                 .where(PostType.name == query)
+                .order_by(Post.created.desc(), Post.id.desc())
                 )
 
-    posts = db.session.execute(stmt).scalars().all()
+#    posts = db.session.execute(stmt).scalars().all()
+    posts = db.paginate(stmt, page=page, per_page=10, error_out=False)
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return render_template('partials/cards.html', posts=posts)
+        return render_template('partials/index_cards.html', posts=posts)
 
     return render_template('index.html', posts=posts)
 

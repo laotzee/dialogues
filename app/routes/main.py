@@ -40,7 +40,6 @@ def login():
 
 
 @blueprint.route("/logout")
-@login_required
 def logout():
     """Route for logout page"""
     page = process_logout()

@@ -1,19 +1,7 @@
-from  ..extensions import login_manager, db
-from werkzeug.security import generate_password_hash, check_password_hash
+from  ..extensions import db
 from ..models.models import User, Post, Tag, PostType
-from functools import wraps
 from sqlalchemy import select
 from flask import request
-
-
-######## DB #######
-
-@login_manager.user_loader
-def load_user(user_id: int) -> User | None:
-    stmt = select(User).where(User.id==user_id)
-    user = db.session.scalars(stmt).first()
-    return user
-
 
 def get_posts() -> list[Post] | None:
     stmt = select(Post)
@@ -72,7 +60,6 @@ def process_register_info():
     email = request.form.get("email")
     return username, password, email
 
-
 ######## Blog #######
 
 def hash_password(password):
@@ -84,5 +71,3 @@ def hash_password(password):
         )
 
     return hashed
-
-

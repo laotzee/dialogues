@@ -1,9 +1,5 @@
 flask
 sqlalchemy
 flask_sqlalchemy
-flask_bootstrap
-flask_ckeditor
-flask_login
-flask_wtf
 dotenv
 gunicorn
