@@ -474,6 +474,11 @@ nav[aria-label="Page navigation"] {
     font-size: var(--s-h1);
 }
 
+.heading-link {
+    color: var(--clr-text);
+    text-decoration: none;
+}
+
 /* Desktop */
 @media (min-width: 800px) {
 
