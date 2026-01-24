@@ -1,6 +1,6 @@
 from .helpers import *
 from ..extensions import db
-from ..models.models import User, Post, Tag, PostType
+from ..models.models import User, Post, Tag, PostType, Subscriber
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
 from email_validator import validate_email, EmailNotValidError
 
