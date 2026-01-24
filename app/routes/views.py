@@ -2,6 +2,7 @@ from .helpers import *
 from ..extensions import db
 from ..models.models import User, Post, Tag, PostType
 from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
+from email_validator import validate_email, EmailNotValidError
 
 def process_index() -> str:
     """Renders the index page passing posts in English"""
@@ -34,6 +35,28 @@ def process_index() -> str:
 
 def process_about():
     return render_template('about.html')
+
+def process_subscription():
+    """Validates and process subscription requests"""
+
+    email: str = request.form.get('email')
+
+    if not email:
+        return "Email is required", 400
+
+    try:
+        email_info = validate_email(email, check_deliverability=True)
+        email = email_info.normalized
+    except EmailNotValidError as e:
+        return f"Invalid email: {str(e)}", 400
+
+    if Subscriber.query.filter_by(email=email).first():
+        return "You're already on the list!", 400
+    
+    new_sub = Subscriber(email=email)
+    db.session.add(new_sub)
+    db.session.commit()
+    return "Subscribed successfully!"
 
 def process_contact() -> str:
     form = ContactForm()

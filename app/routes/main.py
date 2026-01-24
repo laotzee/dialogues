@@ -30,3 +30,11 @@ def posts(slug) -> str:
     """Process general posts actions"""
     page = show_post(slug)
     return page
+
+@blueprint.route("/subscribe", methods=["POST"])
+def subscribe() -> str:
+    """Process subscriptions to email listing"""
+    response = process_subscription()
+    return response
+
+
