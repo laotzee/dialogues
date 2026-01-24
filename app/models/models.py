@@ -73,6 +73,15 @@ class Post(db.Model):
     content_type: Mapped["PostType"] = relationship(back_populates="posts")
     tags: Mapped[list["Tag"]] = relationship(secondary=post_tags, backref="posts")
 
+class Subscriber(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    created: Mapped[datetime] = mapped_column(
+            DateTime(timezone=True),
+            default=func.now(),
+            )
+    is_active = db.Column(db.Boolean, default=True)
+
 def generate_unique_slug(target, value, column_name='slug'):
     """Generates a unique slug for any model"""
     if not value:
