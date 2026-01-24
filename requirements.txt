@@ -1,7 +1,9 @@
 flask
 sqlalchemy
 flask_sqlalchemy
+flask-migrate
 python-slugify
-dotenv
+python-dotenv
 gunicorn
 markdown
+email-validator

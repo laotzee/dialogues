@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
+env = os.getenv('FLASK_ENV')
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret')
@@ -18,3 +19,13 @@ class TestingConfig(Config):
 class ProductionConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///blog.db')
+
+
+config_map = {
+    'development': ('development', 'config.DevelopmentConfig'),
+    'testing': ('testing', 'config.TestingConfig'),
+    'production': ('production', 'config.ProductionConfig'),
+    }
+
+app_env = config_map.get(env, config_map['production'])
+
