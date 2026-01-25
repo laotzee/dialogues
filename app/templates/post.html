@@ -10,16 +10,19 @@
 {% endblock %}
 
 {% block main %}
+<div class='post-content'>
 
-<div class='top-post'>
-    <h1>{{post.title}}</h1>
-    <div class='bar'></div>
+    <div class='top-post'>
+        <h1>{{post.title}}</h1>
+        <div class='bar'></div>
+    </div>
+    <div class="body-post">
+        {{post.body_html | safe }}
+    </div>
+
+    {% include "partials/subs.html"%}
+    {% include "partials/author.html"%}
+
 </div>
-<div class="body-post">
-    {{post.body_html | safe }}
-</div>
-
-{% include "partials/author.html"%}
-
 {% endblock %}
 
