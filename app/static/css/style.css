@@ -34,6 +34,10 @@
     --max-width: 1400px;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
     background-color: var(--clr-body-bg);
     color: var(--clr-text);
@@ -97,6 +101,8 @@ aside h1, aside h2, aside h3 {
 
 aside p {
   line-height: 1.4;
+  max-width: 200px;
+  margin-top: 0px;
 }
 
 aside .logo {
@@ -254,7 +260,6 @@ aside .logo {
 
 .button {
     font-family: inherit;
-    display: inline-flex;
     padding: 0.7rem 1.5rem;
     text-decoration: none;
 
@@ -354,14 +359,12 @@ aside .logo {
 
 .sub {
     justify-content: center;
-
 }
 
 .author {
     display: flex;
     align-items: center;
     gap: 20px;
-    max-width: 70ch;
 }
 
 .author img {
@@ -510,12 +513,21 @@ nav[aria-label="Page navigation"] {
     }
 
     .sidebar {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+
         position: sticky; 
         width: 250px;
         height: 100vh;
         flex-shrink: 0;
         overflow-y: auto;
         top: 0px;
+    }
+
+    .sidebar p {
+
     }
 
     .sidebar::after {
@@ -572,7 +584,11 @@ nav[aria-label="Page navigation"] {
     .widget {
         display: flex;
         align-items: center;
-        gap: 40px;
+        gap: 20px;
+    }
+
+    .post-content  {
+        max-width: 70ch;
     }
 
     .sub-content {
@@ -580,13 +596,12 @@ nav[aria-label="Page navigation"] {
     }
 
     .sub-form {
-        flex: 1.5;
+        flex: 1;
         display: flex;
         gap: 10px;
     }
 
     .sub-form input {
-        flex: 1;
         padding: 10px;
     }
 
