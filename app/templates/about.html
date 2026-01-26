@@ -8,9 +8,7 @@ About
 {% endblock %}
 
 {% block main %}
-<h1>About</h1>
-<p>Everyone has endured some struggles, such as coping with conflicting emotions, loss, or self-management. In the same way, everybody has felt happiness from some accomplishment, mastery over some activity, or awe at the beauty of nature. Even if we only experience a fraction of such a range of events, and what luck has in store for us is unknown, human experience encompasses all we can live.</p>
-<p>More often than not, hardships catch us unprepared, and joys unaware of their value. We learn how to count and talk, but learning how to live, or undergo human experience, is a skill developed mostly unspoken. Our trial-and-error method might suffice to some extent; however, we should enrich our inner resources by instructing ourselves in human experience, self-knowledge, and our interaction with the world.</p>
-<p>Laotze’s Dialogues does not aim to define an irrefutable and rigid lifestyle, but rather explore, refine, and convey ideas from human experience to enhance how we live. This is a never-ending endeavor. Life and circumstances are changing, and so the need to adapt and acquire new knowledge emerges. Such conditions prompt us to learn how to live until our last day alive.</p>
-<p>Reading a fragment of insight will not make it stick with you. There will come a time when you are shaken to the bone, remember a particular piece of writing, and test it. This is the intent behind each word, paragraph, and text; every one of them is meant to resonate with you, spur thinking of your own, and be used. In doing so, I hope Laotze’s Dialogues has an impact on the quality of the experiences we have as human beings.</p>
+    <h1>{{ _('About') }}</h1>
+
+    {% include 'about/' + g.locale + '.html' %}
 {% endblock %}

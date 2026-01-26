@@ -1,5 +1,5 @@
 <header class="container">
-    <a class="logo" href="{{url_for('blueprint.index')}}">
+    <a class="logo" href="{{ local_url('index') }}">
         <img class="logo-img" src="{{url_for('static', filename='img/logo.svg')}}"></img>
     </a>
 
@@ -10,10 +10,10 @@
         <nav class="primary-navigation" id="primary-navigation" data-visible="false">
             <ul>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('blueprint.about') }}">About</a>
+                    <a class="nav-link" href="{{ local_url('about') }}">{{ _('About') }}</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('blueprint.contact') }}">Contact</a>
+                    <a class="nav-link" href="{{ local_url('contact') }}">{{ _('Contact') }}</a>
                  </li>
             </ul>
         </nav>

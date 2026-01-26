@@ -3,6 +3,9 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import MetaData
 from flask_migrate import Migrate
 
+from flask import Flask, request
+from flask_babel import Babel
+
 convention = {
     "ix": "ix_%(column_0_label)s",
     "uq": "uq_%(table_name)s_%(column_0_name)s",
@@ -16,3 +19,9 @@ class Base(DeclarativeBase):
 
 db = SQLAlchemy(model_class=Base)
 migrate = Migrate()
+babel = Babel()
+
+def get_locale():
+    if request.path.startswith('/es'):
+        return 'es'
+    return 'en'

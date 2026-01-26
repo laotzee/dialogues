@@ -7,6 +7,9 @@ env = os.getenv('FLASK_ENV')
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'default-secret')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    BASEDIR = os.path.abspath(os.path.dirname(__file__))
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_TRANSLATION_DIRECTORIES = os.path.join(BASEDIR, 'translations')
 
 class DevelopmentConfig(Config):
     DEBUG = True

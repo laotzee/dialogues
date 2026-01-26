@@ -5,13 +5,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const primaryNav = document.querySelector('.primary-navigation');
     const filterButtons = document.querySelectorAll('.button-item');
 
-    async function updateBlogContent(url) {
+    const getLangPrefix = () => {
+        return window.location.pathname.startsWith('/es') ? '/es' : '';
+    };
+
+    async function updateBlogContent(queryString) {
         if (!blogContainer) return;
 
         blogContainer.classList.add('loading');
 
+        const langPrefix = getLangPrefix();
+        const fullUrl = `${langPrefix}${queryString}`;
+
         try {
-            const response = await fetch(url, {
+            const response = await fetch(fullUrl, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             });
 
@@ -58,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.add('focused');
 
             const contentType = button.getAttribute('data-type');
+            
             updateBlogContent(`/?type=${contentType}`);
         });
     });
@@ -72,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!isInactive) {
             const pageNum = pageBtn.dataset.page;
+            
             updateBlogContent(`/?page=${pageNum}`);
         }
     });

@@ -1,0 +1,108 @@
+# Spanish translations for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-01-26 17:09-0400\n"
+"PO-Revision-Date: 2026-01-26 16:29-0400\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: es\n"
+"Language-Team: es <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: app/templates/about.html:11 app/templates/partials/header.html:13
+msgid "About"
+msgstr "Sobre"
+
+#: app/templates/index.html:4
+msgid "Human Dialogues"
+msgstr "Diálogos Humanos"
+
+#: app/templates/index.html:8
+msgid "Human"
+msgstr "Diálogos"
+
+#: app/templates/index.html:8
+msgid "Dialogues"
+msgstr "Humanos"
+
+#: app/templates/index.html:10
+msgid "A blog about the experience of being human"
+msgstr "Un blog acerca de la experiencia de ser humano"
+
+#: app/templates/index.html:11
+msgid "/es"
+msgstr "/"
+
+#: app/templates/index.html:11
+msgid "Versión en Español"
+msgstr "English version"
+
+#: app/templates/index.html:16
+msgid "All"
+msgstr "Todo"
+
+#: app/templates/index.html:19
+msgid "Post"
+msgstr "Post"
+
+#: app/templates/index.html:22
+msgid "Poem"
+msgstr "Poema"
+
+#: app/templates/index.html:25
+msgid "Story"
+msgstr "Historia"
+
+#: app/templates/partials/author.html:2
+msgid "picture of the author"
+msgstr "Imagen del autor"
+
+#: app/templates/partials/author.html:6
+msgid "Information Engineer and writer. Passionate human being about thinking"
+msgstr "Ingeniero en Informática, escritor y humano apasionado por pensar"
+
+#: app/templates/partials/base.html:2
+msgid "en"
+msgstr "es"
+
+#: app/templates/partials/base.html:32
+msgid "Support me"
+msgstr "Apóyame"
+
+#: app/templates/partials/cards.html:13
+msgid "Read"
+msgstr "Leer"
+
+#: app/templates/partials/header.html:16
+msgid "Contact"
+msgstr "Contacto"
+
+#: app/templates/partials/share.html:2
+msgid "Share this post"
+msgstr "Comparte este post"
+
+#: app/templates/partials/subs.html:3
+msgid "Never miss a post"
+msgstr "Nunca te pierdas de un post"
+
+#: app/templates/partials/subs.html:4
+msgid "Receive a notification when new post is published every week!"
+msgstr "Recibe una notificación cuando el post semenal esté disponible!"
+
+#: app/templates/partials/subs.html:10
+msgid "Enter your email address"
+msgstr "Ingresa tu email"
+
+#: app/templates/partials/subs.html:14
+msgid "Let me know!"
+msgstr "Avísame"
+

@@ -1,16 +1,16 @@
 {% for post in posts.items %}
     <article class='card'>
         <div class='article-metadata'>
-            <p class='m'>{{post.content_type.name}}</p>
+            <p class='m'>{{ _(post.content_type.name) }}</p>
             <p class='m'>{{post.created.strftime("%B %d, %Y")}}</p>
         </div>
-        <a href="{{url_for('blueprint.posts', slug=post.slug)}}" class="heading-link">
+        <a href="{{ local_url('posts', slug=post.slug) }}" class="heading-link">
             <h2>{{post.title}}</h2>
         </a>
         <div class="bar"></div>
         <p>{{post.excerpt}}</p>
         <div class="article-button">
-            <a href="{{url_for('blueprint.posts', slug=post.slug)}}" class="button">Read</a>
+            <a href="{{ local_url('posts', slug=post.slug) }}" class="button">{{ _('Read') }}</a>
         </div>
     </article>
 {% endfor %}

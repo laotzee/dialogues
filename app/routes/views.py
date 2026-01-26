@@ -1,26 +1,27 @@
 from .helpers import *
 from ..extensions import db
 from ..models.models import User, Post, Tag, PostType, Subscriber
-from flask import Blueprint, render_template, redirect, url_for, request, jsonify, flash
+from flask import (Blueprint, render_template, redirect, url_for, request,
+                   jsonify, flash, g)
 from email_validator import validate_email, EmailNotValidError
 
 def process_index() -> str:
     """Renders the index page passing posts in English"""
     query = request.args.get('type', 'all')
     page = request.args.get('page', 1, type=int)
-
+    lang_code = 2 if g.locale == 'es' else 1
 
     if query == 'all':
         stmt = (
                 db.select(Post)
-                .where(Post.lang_id == 1)
+                .where(Post.lang_id == lang_code)
                 .order_by(Post.created.desc(), Post.id.desc())
                 )
     else:
         stmt = (
                 db.select(Post)
                 .join(Post.content_type)
-                .where(Post.lang_id == 1)
+                .where(Post.lang_id == lang_code)
                 .where(PostType.name == query)
                 .order_by(Post.created.desc(), Post.id.desc())
                 )

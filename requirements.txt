@@ -7,3 +7,4 @@ python-dotenv
 gunicorn
 markdown
 email-validator
+Flask-Babel

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ _('en') }}">
 
     <head>
         <meta charset="utf-8">
@@ -29,9 +29,10 @@
     <script>
       kofiWidgetOverlay.draw('humandialogues', {
         'type': 'floating-chat',
-        'floating-chat.donateButton.text': 'Support me',
+          'floating-chat.donateButton.text': '{{ _('Support me') }}',
         'floating-chat.donateButton.background-color': '#393E46',
         'floating-chat.donateButton.text-color': 'F7F7F7'
       });
     </script>
+
 </html>
