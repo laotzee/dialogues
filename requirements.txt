@@ -8,3 +8,4 @@ gunicorn
 markdown
 email-validator
 Flask-Babel
+python-frontmatter
