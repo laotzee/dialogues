@@ -24,15 +24,15 @@
 
         {% include 'partials/footer.html' %}
 
-    </body>
     <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
     <script>
       kofiWidgetOverlay.draw('humandialogues', {
         'type': 'floating-chat',
           'floating-chat.donateButton.text': '{{ _('Support me') }}',
         'floating-chat.donateButton.background-color': '#393E46',
-        'floating-chat.donateButton.text-color': 'F7F7F7'
+        'floating-chat.donateButton.text-color': '#F7F7F7',
       });
     </script>
+    </body>
 
 </html>

@@ -482,6 +482,11 @@ nav[aria-label="Page navigation"] {
     text-decoration: none;
 }
 
+[id^="kofi-widget"] { 
+    color-scheme: light; 
+}
+
+
 /* Desktop */
 @media (min-width: 800px) {
 
