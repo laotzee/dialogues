@@ -60,24 +60,7 @@ def process_subscription():
     return "Subscribed successfully!"
 
 def process_contact() -> str:
-    form = ContactForm()
-    if form.validate_on_submit():
-
-        name = request.form.get("name")
-        email = request.form.get("email")
-        message = request.form.get("message")
-
-        body = message_template(name, email, message)
-        user_email = format_message(body)
-        send_email(user_email)
-
-        flash("Email sent. You'll receive a reply as soon as we can!", "success")
-
-        return render_template(
-            "contact.html",
-            form=form,
-        )
-    return render_template("contact.html",  form=form)
+    return render_template("contact.html")
 
 def process_login() -> str:
     form = LogInForm()
