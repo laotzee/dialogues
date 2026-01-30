@@ -7,7 +7,7 @@ from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from ..extensions import db, Base
 
-excerpt_len = 100
+excerpt_len = 200
 
 post_tags = Table(
     "post_tags",
