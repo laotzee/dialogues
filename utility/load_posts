@@ -1,0 +1,6 @@
+#! /bin/bash
+
+cd ~/projects/dialogues
+
+ls -r ~/projects/laotzes-dialogues/en/* | python -m utility.process_posts
+ls -r ~/projects/laotzes-dialogues/es/* | python -m utility.process_posts
