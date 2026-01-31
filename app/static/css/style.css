@@ -115,6 +115,15 @@ aside .logo {
     gap: 30px;
 }
 
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+
 .logo {
     font-weight: bold;
     color: var(--clr-highlight);
@@ -518,21 +527,12 @@ nav[aria-label="Page navigation"] {
     }
 
     .sidebar {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-
         position: sticky; 
         width: 250px;
         height: 100vh;
         flex-shrink: 0;
         overflow-y: auto;
         top: 0px;
-    }
-
-    .sidebar p {
-
     }
 
     .sidebar::after {
