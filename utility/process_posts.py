@@ -24,6 +24,7 @@ def process_post(file):
             user_id=user["laotze"],
             lang_id=lang[post["lang"]],
             type_id=post_type[post["type"]],
+            created=post["date"],
             )
     return new_post
 
