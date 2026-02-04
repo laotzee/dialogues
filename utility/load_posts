@@ -1,6 +1,9 @@
 #! /bin/bash
 
-cd ~/projects/dialogues
+posts_location=~/projects/laotzes-dialogue
+project_folder=~/projects/dialogues
 
-ls -r ~/projects/laotzes-dialogues/en/* | python -m utility.process_posts
-ls -r ~/projects/laotzes-dialogues/es/* | python -m utility.process_posts
+cd $project_folder
+
+ls -r  "$posts_location/en/*"| python -m utility.process_posts
+ls -r  "$posts_location/es/*"| python -m utility.process_posts
