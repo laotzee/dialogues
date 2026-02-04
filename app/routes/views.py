@@ -15,6 +15,7 @@ def process_index() -> str:
         stmt = (
                 db.select(Post)
                 .where(Post.lang_id == lang_code)
+                .where(Post.is_published == True)
                 .order_by(Post.created.desc(), Post.id.desc())
                 )
     else:
@@ -23,6 +24,7 @@ def process_index() -> str:
                 .join(Post.content_type)
                 .where(Post.lang_id == lang_code)
                 .where(PostType.name == query)
+                .where(Post.is_published == True)
                 .order_by(Post.created.desc(), Post.id.desc())
                 )
 
