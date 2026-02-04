@@ -56,7 +56,6 @@ class Post(db.Model):
     slug: Mapped[str] = mapped_column(String(200), unique=True, index=True)
     created: Mapped[datetime] = mapped_column(
             DateTime(timezone=True),
-            default=func.now(),
             index=True,
             )
     updated: Mapped[datetime] = mapped_column(
@@ -134,3 +133,10 @@ def generate_post_excerpt(mapper, connection, target):
     
     if not target.excerpt:
         target.excerpt = target.body_raw[:excerpt_len-1]
+
+@event.listens_for(Post, 'before_insert')
+def generate_post_date(mapper, connection, target):
+    
+    if not target.created:
+        target.created = func.now()
+
