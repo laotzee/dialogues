@@ -6,14 +6,14 @@ from flask import (Blueprint, render_template, redirect, url_for, request,
 from email_validator import validate_email, EmailNotValidError
 
 def process_index() -> str:
-    """Renders the index page passing posts in English"""
+    """Renders the index page passing posts"""
     query = request.args.get('type', 'all')
     page = request.args.get('page', 1, type=int)
     lang_code = 2 if g.locale == 'es' else 1
 
     if query == 'all':
         stmt = (
-                db.select(Post)
+    db.select(Post)
                 .where(Post.lang_id == lang_code)
                 .where(Post.is_published == True)
                 .order_by(Post.created.desc(), Post.id.desc())
@@ -37,11 +37,11 @@ def process_index() -> str:
     return render_template('index.html', posts=posts)
 
 def process_about():
+    """Renders the about page"""
     return render_template('about.html')
 
 def process_subscription():
     """Validates and process subscription requests"""
-
     email: str = request.form.get('email')
 
     if not email:
@@ -62,102 +62,11 @@ def process_subscription():
     return "Subscribed successfully!"
 
 def process_contact() -> str:
+    """Renders the about contact"""
     return render_template("contact.html")
 
-def process_login() -> str:
-    form = LogInForm()
-
-    if form.validate_on_submit():
-        email, password = process_login_info()
-        user = get_user_by_attribute(email=email)
-
-        if user:
-            if check_password_hash(user.password, password):
-                login_user(user)
-                return redirect(url_for("blueprint.index"))
-            else:
-                flash("Incorrect password", "error")
-        else:
-            flash("Such email does not exist. Try to register", "error")
-            return redirect(url_for("blueprint.register"))
-    return render_template("login.html", form=form)
-
-def process_register() -> str:
-    form = RegisterForm()
-
-    if form.validate_on_submit():
-        username, password, email = process_register_info()
-        email_exist = get_user_by_attribute(email=email)
-        username_exist = get_user_by_attribute(username=username)
-        print(username_exist)
-        print(email_exist)
-
-        if email_exist:
-            flash("An account with that email already exist.\nTry logging in", "error")
-            return redirect(url_for("blueprint.login"))
-        elif username_exist:
-            flash("That username is already used", "error)")
-        else:
-            hashed_password = hash_password(password)
-            new_user = create_user(username, password, email)
-            login_user(new_user)
-            return redirect(url_for("blueprint.index"))
-
-    return render_template("register.html", form=form)
-
-
-def process_logout() -> str:
-    logout_user()
-    return redirect(url_for("blueprint.index"))
-
-
 def show_post(slug: str) -> str:
-
+    """Renders the post pages"""
     stmt = db.select(Post).where(Post.slug == slug)
     post = db.session.execute(stmt).scalar()
-
     return render_template("post.html", post=post)
-
-def delete_post(post_id: int) -> str:
-    post_to_delete = Post.query.get(post_id)
-    db.session.delete(post_to_delete)
-    db.session.commit()
-    return redirect(url_for('blueprint.home'))
-
-def update_post(post_id: int) -> str:
-    post = Post.query.get(post_id)
-    edit_form = CreatePostForm(
-        title=post.title,
-        subtitle=post.subtitle,
-        img_url=post.img_url,
-        author=post.author,
-        body=post.body
-    )
-    if edit_form.validate_on_submit():
-        post.title = edit_form.title.data
-        post.subtitle = edit_form.subtitle.data
-        post.img_url = edit_form.img_url.data
-        post.body = edit_form.body.data
-        db.session.commit()
-        return redirect(url_for("blueprint.show_post", post_id=post.id))
-
-    return render_template("make-post.html", form=edit_form)
-
-def create_post() -> str:
-    form = CreatePostForm()
-    if form.validate_on_submit():
-
-        new_post = Post(
-            author=current_user.name,
-            title=form.title.data,
-            subtitle=form.subtitle.data,
-            date=date.today().strftime("%B %d, %Y"),
-            body=form.body.data,
-            img_url=form.img_url.data,
-            user_id=current_user.id,
-        )
-        db.session.add(new_post)
-        db.session.commit()
-        return redirect(url_for("blueprint.home"))
-    return render_template("make-post.html", form=form)
-
