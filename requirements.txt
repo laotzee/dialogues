@@ -9,3 +9,5 @@ markdown
 email-validator
 Flask-Babel
 python-frontmatter
+pymysql
+cryptography
