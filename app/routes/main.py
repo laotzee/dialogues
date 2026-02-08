@@ -2,6 +2,7 @@ from .views import *
 from ..models.models import Post
 from ..extensions import db
 
+
 blueprint = Blueprint('blueprint', __name__)
 
 @blueprint.route('/')

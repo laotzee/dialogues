@@ -28,7 +28,6 @@ def process_index() -> str:
                 .order_by(Post.created.desc(), Post.id.desc())
                 )
 
-#    posts = db.session.execute(stmt).scalars().all()
     posts = db.paginate(stmt, page=page, per_page=10, error_out=False)
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
@@ -39,6 +38,16 @@ def process_index() -> str:
 def process_about():
     """Renders the about page"""
     return render_template('about.html')
+
+def process_contact() -> str:
+    """Renders the about contact"""
+    return render_template("contact.html")
+
+def show_post(slug: str) -> str:
+    """Renders the post pages"""
+    stmt = db.select(Post).where(Post.slug == slug)
+    post = db.session.execute(stmt).scalar()
+    return render_template("post.html", post=post)
 
 def process_subscription():
     """Validates and process subscription requests"""
@@ -60,13 +69,3 @@ def process_subscription():
     db.session.add(new_sub)
     db.session.commit()
     return "Subscribed successfully!"
-
-def process_contact() -> str:
-    """Renders the about contact"""
-    return render_template("contact.html")
-
-def show_post(slug: str) -> str:
-    """Renders the post pages"""
-    stmt = db.select(Post).where(Post.slug == slug)
-    post = db.session.execute(stmt).scalar()
-    return render_template("post.html", post=post)
