@@ -43,7 +43,7 @@ def process_contact() -> str:
     """Renders the about contact"""
     return render_template("contact.html")
 
-def show_post(slug: str) -> str:
+def process_post(slug: str) -> str:
     """Renders the post pages"""
     stmt = db.select(Post).where(Post.slug == slug)
     post = db.session.execute(stmt).scalar()

@@ -29,7 +29,7 @@ def contact():
 @blueprint.route("/posts/<string:slug>", methods=["GET"])
 def posts(slug) -> str:
     """Process general posts actions"""
-    page = show_post(slug)
+    page = process_post(slug)
     return page
 
 
