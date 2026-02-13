@@ -7,7 +7,7 @@ env = os.getenv('FLASK_ENV')
 db_url = "mysql+pymysql://{}:{}@{}/{}".format(
     os.getenv('DB_USER', 'root'),
     os.getenv('DB_PASSWORD', ''),
-    os.getenv('DB_HOST', 'host.docker.internal'),
+    os.getenv('DB_HOST', 'db'),
     os.getenv('DB_NAME', 'my_database'),
 )
 
