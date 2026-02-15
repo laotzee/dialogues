@@ -16,18 +16,20 @@ class Config:
     BASEDIR = os.path.abspath(os.path.dirname(__file__))
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_TRANSLATION_DIRECTORIES = os.path.join(BASEDIR, 'translations')
-    SQLALCHEMY_DATABASE_URI = db_url
+
 
 class DevelopmentConfig(Config):
+    SQLALCHEMY_DATABASE_URI = "sqlite:///./blog.db"
     DEBUG = True
 
 
 class TestingConfig(Config):
-    TESTING = True
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    TESTING = True
 
 
 class ProductionConfig(Config):
+    SQLALCHEMY_DATABASE_URI = db_url
     DEBUG = False
 
 
@@ -37,5 +39,6 @@ config_map = {
     'production': ('production', 'config.ProductionConfig'),
     }
 
-app_env = config_map.get(env, config_map['production'])
+app_env = config_map.get(env, 'production')
 
+print(app_env)
