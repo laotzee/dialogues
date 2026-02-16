@@ -9,12 +9,12 @@ def cli_commands(app):
     """Register commands for flask app"""
 
     @app.cli.command("save_posts")
-    @click.argument("file")
-    def save_posts(files):
+    def save_posts():
         """Loads posts form stdin to the database"""
-        posts = sys.stdin
+        files = sys.stdin
         for file in files:
             file = file.strip()
+            print(file)
             new_post = create_post(file)
             db.session.add(new_post)
         db.session.commit()
