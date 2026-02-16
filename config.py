@@ -40,5 +40,3 @@ config_map = {
     }
 
 app_env = config_map.get(env, 'production')
-
-print(app_env)
