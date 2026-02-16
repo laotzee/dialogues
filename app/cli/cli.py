@@ -8,7 +8,7 @@ from app.models.models import Post
 def cli_commands(app):
     """Register commands for flask app"""
 
-    @app.cli.command("save_posts")
+    @app.cli.command("save")
     def save_posts():
         """Loads posts form stdin to the database"""
         files = sys.stdin
@@ -20,11 +20,15 @@ def cli_commands(app):
         db.session.commit()
 
 
-    @app.cli.command("publish_post")
+    @app.cli.command("publish")
     def publish_post():
         """Changes to public the oldest unpublished posts on the database"""
         stmt = db.select(Post).order_by(Post.created).where(
                 Post.is_published == False)
         post = db.session.scalars(stmt).first()
-        post.is_published = True
-        db.session.commit()
+        if post:
+            post.is_published = True
+            db.session.commit()
+        else:
+            print("No posts to be published")
+
