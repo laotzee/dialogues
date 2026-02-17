@@ -1,9 +1,17 @@
 #! /bin/bash
 
-posts_location=~/projects/laotzes-dialogues
-project_folder=~/projects/dialogues
+HOST_FOLDER="../laotzes-dialogues" 
 
-cd $project_folder
+CONTAINER_NAME="dialogues"
 
-ls -r  "$posts_location/en/"* | python -m utility.process_posts
-ls -r  "$posts_location/es/"* | python -m utility.process_posts
+CONTAINER_PREFIX="/data/posts/"
+
+find "$HOST_FOLDER" -type f -mmin -20 -print0 | while IFS= read -r -d '' file; do
+
+    RELATIVE=$(realpath --relative-to="$HOST_FOLDER" "$file")
+    
+    FULL_INTERNAL_PATH="${CONTAINER_PREFIX}${RELATIVE}"
+    
+    echo "$FULL_INTERNAL_PATH"
+
+done | docker exec -i "$CONTAINER_NAME" flask save
