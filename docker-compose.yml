@@ -9,6 +9,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /dev/null:/etc/nginx/conf.d/default.conf:ro
       - certbot-etc:/etc/letsencrypt:ro
       - certbot-var:/var/www/certbot:ro
     depends_on:
@@ -44,7 +45,8 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./human-dialogues:/data/human-dialogues
+      - ./human-dialogues:/data/posts
+      - ./assets/img/default.png:/code/app/static/img/default.png:ro
     networks:
       - backend
     healthcheck:
