@@ -10,11 +10,10 @@ def cli_commands(app):
 
     @app.cli.command("save")
     def save_posts():
-        """Loads posts form stdin to the database"""
+        """Loads posts from stdin to the database"""
         files = sys.stdin
         for file in files:
             file = file.strip()
-            print(file)
             new_post = create_post(file)
             db.session.add(new_post)
         db.session.commit()
