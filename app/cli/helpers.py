@@ -16,6 +16,12 @@ USER = {
         "laotze":1,
         }
 
+def is_post_congruent(file):
+    """Returns True if a file is a valid post containing a language, title, post type, and content"""
+    #frontmatter.check(file) to check if it's a frontmatter file or not
+
+    pass
+
 def create_post(file):
     """Creates Post instance from frontmatter file"""
     post = frontmatter.load(file)
