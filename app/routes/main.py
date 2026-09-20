@@ -1,11 +1,10 @@
 from .views import *
-from ..models.models import Post
-from ..extensions import db
 
 
-blueprint = Blueprint('blueprint', __name__)
+blueprint = Blueprint("blueprint", __name__)
 
-@blueprint.route('/')
+
+@blueprint.route("/")
 def index():
     """Route for home page"""
     page = process_index()
