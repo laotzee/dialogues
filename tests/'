@@ -1,0 +1,25 @@
+
+
+# cli
+
+## Cli
+
+- save_posts()
+    - Change create_post to process_post
+    - Guard for when a post can't be created
+    - 
+
+
+
+- publish_post()
+
+## Helpers
+
+- creat_post
+    - it captures all post types
+    - languages
+    - What happens if a file is given that is incomplete? (no title, content, or a mispelled type)
+    - what happens if I don't give a correct path at all? 
+
+
+
